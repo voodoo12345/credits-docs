@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>credits package &#8212; Credits 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Credits 1.0.0 documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="credits-package">
+<h1>credits package<a class="headerlink" href="#credits-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-credits.proof">
+<span id="credits-proof-module"></span><h2>credits.proof module<a class="headerlink" href="#module-credits.proof" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="credits.proof.Proof">
+<em class="property">class </em><code class="descclassname">credits.proof.</code><code class="descname">Proof</code><a class="headerlink" href="#credits.proof.Proof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">credits.interface.Marshallable</span></code>, <code class="xref py py-class docutils literal"><span class="pre">credits.interface.Applicable</span></code>, <code class="xref py py-class docutils literal"><span class="pre">credits.interface.Signable</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="credits.proof.SingleKeyProof">
+<em class="property">class </em><code class="descclassname">credits.proof.</code><code class="descname">SingleKeyProof</code><span class="sig-paren">(</span><em>address</em>, <em>nonce</em>, <em>challenge</em>, <em>verifying_key=None</em>, <em>signature=None</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#credits.proof.Proof" title="credits.proof.Proof"><code class="xref py py-class docutils literal"><span class="pre">credits.proof.Proof</span></code></a></p>
+<dl class="attribute">
+<dt id="credits.proof.SingleKeyProof.FQDN">
+<code class="descname">FQDN</code><em class="property"> = 'works.credits.core.SingleKeyProof'</em><a class="headerlink" href="#credits.proof.SingleKeyProof.FQDN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.proof.SingleKeyProof.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof.apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.proof.SingleKeyProof.marshall">
+<code class="descname">marshall</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof.marshall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.proof.SingleKeyProof.sign">
+<code class="descname">sign</code><span class="sig-paren">(</span><em>signing_key</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof.sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign this proof.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#credits.proof.SingleKeyProof" title="credits.proof.SingleKeyProof">credits.proof.SingleKeyProof</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="credits.proof.SingleKeyProof.unmarshall">
+<em class="property">classmethod </em><code class="descname">unmarshall</code><span class="sig-paren">(</span><em>registry</em>, <em>payload</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof.unmarshall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.proof.SingleKeyProof.verify">
+<code class="descname">verify</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.proof.SingleKeyProof.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify this proof has been signed and that it&#8217;s signature/verifying_key/challenge is valid against state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">result, error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-credits.transform">
+<span id="credits-transform-module"></span><h2>credits.transform module<a class="headerlink" href="#module-credits.transform" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="credits.transform.BalanceTransferTransform">
+<em class="property">class </em><code class="descclassname">credits.transform.</code><code class="descname">BalanceTransferTransform</code><span class="sig-paren">(</span><em>from_address</em>, <em>to_address</em>, <em>amount</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#credits.transform.Transform" title="credits.transform.Transform"><code class="xref py py-class docutils literal"><span class="pre">credits.transform.Transform</span></code></a></p>
+<dl class="attribute">
+<dt id="credits.transform.BalanceTransferTransform.FQDN">
+<code class="descname">FQDN</code><em class="property"> = 'works.credits.core.BalanceTransform.1.0.0'</em><a class="headerlink" href="#credits.transform.BalanceTransferTransform.FQDN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.apply" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">credits.util.Result</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.get_challenge">
+<code class="descname">get_challenge</code><span class="sig-paren">(</span><em>hash_provider</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.get_challenge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.hash">
+<code class="descname">hash</code><span class="sig-paren">(</span><em>hash_provider</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.marshall">
+<code class="descname">marshall</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.marshall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.required_authorizations">
+<code class="descname">required_authorizations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.required_authorizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only allow a balance transformation if the from_address provides a proof.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="credits.transform.BalanceTransferTransform.unmarshall">
+<em class="property">classmethod </em><code class="descname">unmarshall</code><span class="sig-paren">(</span><em>registry</em>, <em>payload</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.unmarshall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.BalanceTransferTransform.verify">
+<code class="descname">verify</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.BalanceTransferTransform.verify" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">result, error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="credits.transform.Transform">
+<em class="property">class </em><code class="descclassname">credits.transform.</code><code class="descname">Transform</code><a class="headerlink" href="#credits.transform.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">credits.interface.Marshallable</span></code>, <code class="xref py py-class docutils literal"><span class="pre">credits.interface.Hashable</span></code></p>
+<dl class="method">
+<dt id="credits.transform.Transform.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.Transform.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform last minute checks that the transform can specifically apply _now_. Then apply. Return the new state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> &#8211; The state to apply against.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">credits.state.State</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">credits.state.State</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.Transform.get_challenge">
+<code class="descname">get_challenge</code><span class="sig-paren">(</span><em>hash_provider</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.Transform.get_challenge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.Transform.required_authorizations">
+<code class="descname">required_authorizations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.Transform.required_authorizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of address&#8217;s that must provide a proof for the parent transaction apply correctly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="credits.transform.Transform.verify">
+<code class="descname">verify</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#credits.transform.Transform.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify that this transform is still applicable in the future. Raise an exception if it can&#8217;t verify.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> &#8211; The state to verify against.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">credits.state.State</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-credits">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-credits" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">credits package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-credits.proof">credits.proof module</a></li>
+<li><a class="reference internal" href="#module-credits.transform">credits.transform module</a></li>
+<li><a class="reference internal" href="#module-credits">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/credits.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, David Smith.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/credits.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
