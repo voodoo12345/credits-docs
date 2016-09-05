@@ -47,20 +47,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   architecture_overview
-   corepy_cli
-   corepy_http_api
-   credits
-   gcloud_api
-   gcloud_signup_process
-   genesis_intro
-   glossary
-   proofs_intro
-   quick_start
-   stateview_intro
-   transform_intro
-   transform_intro
-
 
 Indices and tables
 ==================
