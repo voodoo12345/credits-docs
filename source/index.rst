@@ -36,8 +36,7 @@ using the tutorials to the left of the page.
 
 A good starting point to get a general explanation of the system is our `Architecture Overview
 <%7B%%20post_url%202016-07-31-architecture-overview%20%%7D>`__.  Following that, learn how to create basic functionality
-in a Credits Module by following our tutorial on building `Credits Transforms
-<%7B%%20post_url%202016-07-31-transform-intro%20%%7D>`__.
+in a Credits Module by following our tutorial on building :ref:`transform`
 
 Once you have a basic understanding of these introductory topics, complete a full end-to-end deployment to our platform
 by following our tutorial on `Cloud Deployment <architecture_overview.html>`__.
@@ -46,6 +45,8 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   transform
 
 
 Indices and tables
