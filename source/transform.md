@@ -20,21 +20,18 @@ result.
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import attr
-import typing
-
 from credits.transform import Transform
 
 
-@attr.s
 class BalanceTransform(Transform):
     STATE_BALANCE = "core.credits.balance_app.Balances"
 
-    from_address = attr.ib()
-    to_address = attr.ib()
-    amount = attr.ib()
+    def __init__(self, from_address, to_address, amount):
+        self.from_address = from_address
+        self.to_address = to_address
+        self.amount = amount
 
-    def verify(self, state: dict) -> typing.Tuple[None, typing.Optional[str]]:
+    def verify(self, state):
         balances = state[self.STATE_BALANCES]
 
         if self.from_address not in balances:
@@ -60,8 +57,9 @@ class BalanceTransform(Transform):
 
         return None, None  # Nothing to return, but no error.
 
-    def apply(self, state: dict) -> typing.Tuple[typing.Optional[dict], typing.Optional[str]]:
+    def apply(self, state):
         balances = state[self.BALANCES]
+
         try:
             # If the to_address doesn't exist, create it.
             balances[self.to_address] = balances.get(self.to_address, 0) + self.amount
