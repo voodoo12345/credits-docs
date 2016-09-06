@@ -46,7 +46,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   transaction
    transform
+   proof
 
 
 Indices and tables

@@ -17,6 +17,10 @@ perform any verification that has to be performed "upon application". If this
 verification fails, the apply should fail and return an errornous result
 result.
 
+Note: This is not a _complete_ Transform example, it has been reduced to show
+_just_ the verify and apply logic. If you need a working example you should
+import ```credits.transform.BalanceTransform``` and use that.
+
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
