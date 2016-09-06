@@ -79,6 +79,10 @@ class SingleKeyProof(Proof):
         return state, None
 
     def apply(self, state):
+        """
+        Apply this proof by incrementing the target address' nonce forwards.
+        This stops this Proof's parent Transaction from being executed.
+        """
         nonces = state[self.STATE_NONCE]
         address = CreditsAddressProvider(self.verifying_key.to_string()).get_address()
 

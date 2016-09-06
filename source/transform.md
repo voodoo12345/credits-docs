@@ -36,6 +36,10 @@ class BalanceTransform(Transform):
         self.amount = amount
 
     def verify(self, state):
+        """
+        Verify it is possible, to apply either now or in the future. Return an
+        errornous response if verification fails.
+        """
         balances = state[self.STATE_BALANCES]
 
         if self.from_address not in balances:
@@ -62,6 +66,10 @@ class BalanceTransform(Transform):
         return None, None  # Nothing to return, but no error.
 
     def apply(self, state):
+        """
+        Modify state, if this fails return an errornous result. Theoretially
+        apply should never fail is verify passes.
+        """
         balances = state[self.BALANCES]
 
         try:
