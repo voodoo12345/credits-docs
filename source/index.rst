@@ -49,6 +49,7 @@ Contents:
    transaction
    transform
    proof
+   interfaces
 
 
 Indices and tables
