@@ -1,9 +1,10 @@
 # Transaction
-Transactions are an ```Applicable```, ```Marshallable```, and ```Hashable```
-object.  Transactions are the unit of work used to maniupulate state on the
-blockchain.  They provide both a ```Transform``` to mutate state and
-one-or-many ```Proof```s to authenticate the changes proposed in the
-```Transform```.
+Transactions are an [Applicable](interfaces.html#applicable),
+[Marshallable](interfaces.html#marshallable), and
+[Hashable](interfaces.html#hashable) object.  Transactions are the unit
+of work used to maniupulate state on the blockchain.  They provide both a
+```Transform``` to mutate state and one-or-many ```Proof```s to authenticate
+the changes proposed in the ```Transform```.
 
 To construct a ```Transaction``` it's dependencies should be constructed and injected.
 First a ```Transform``` must be constructed, each ```Transform```s constructor

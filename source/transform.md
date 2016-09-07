@@ -1,8 +1,9 @@
 # Transform
-Transforms are an ```Applicable```, ```Marshallable```, and ```Hashable```
-object.  They are constructed with all nessasary values required to modify state
-during the ```apply``` method and are used as the standard unit of work inside
-the framework to modify State.
+Transforms are an [Applicable](interfaces.html#applicable),
+[Marshallable](interfaces.html#marshallable), and
+[Hashable](interfaces.html#hashable) object.  They are constructed with all
+nessasary values required to modify state during the ```apply``` method and are
+used as the standard unit of work inside the framework to modify State.
 
 When a Transform is onboarded onto an Node, it is verified against the current
 Blockchain State. The verify method should perform checks against state to
