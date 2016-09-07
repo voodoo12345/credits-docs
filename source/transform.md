@@ -1,8 +1,8 @@
 # Transform
-Transforms are an ```Applicable``` object requiring both a ```validate``` and
-```apply``` method. They are constructed with all nessasary values required to
-modify state during the ```apply``` method and are used as the standard unit of
-work inside the framework to modify State.
+Transforms are an ```Applicable```, ```Marshallable```, and ```Hashable```
+object.  They are constructed with all nessasary values required to modify state
+during the ```apply``` method and are used as the standard unit of work inside
+the framework to modify State.
 
 When a Transform is onboarded onto an Node, it is verified against the current
 Blockchain State. The verify method should perform checks against state to
