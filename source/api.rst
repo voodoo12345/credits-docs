@@ -4,4 +4,4 @@ PaaS API
 ========
 
 .. raw:: html
-   :file: _static/swagger.html
+   :file: static/api.html

@@ -1,0 +1,447 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Credits Services"
+  },
+  "basePath": "/api/v1",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/token": {
+      "post": {
+        "tags": [
+          "token"
+        ],
+        "summary": "Create a new Token.\n",
+        "description": "Create a new Token.\n",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "token"
+        ],
+        "summary": "Revoke a Token using it's api_key.\n",
+        "description": "Revoke a Token using it's api_key.\n",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a new User.\n",
+        "description": "Create a new User.\n",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Input"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve a User's credentials.\n",
+        "description": "Retrieve a User's credentials.\n",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "summary": "Update a User's credentials.\n",
+        "description": "Update a User's credentials.\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organization": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "summary": "Create a new Organization.\n",
+        "description": "Create a new Organization.\n",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "401": {
+            "description": "Authentication Required"
+          }
+        }
+      }
+    },
+    "/organization/{id}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve an Organization's credentials.\n",
+        "description": "Retrieve an Organization's credentials.\n",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/network": {
+      "post": {
+        "tags": [
+          "network"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "summary": "Create a new Network.\n",
+        "description": "Create a new Network.\n",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "organization_id",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "node_count",
+            "in": "formData",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          }
+        }
+      }
+    },
+    "/network/{id}": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve a Network by it's ID\n",
+        "description": "Retrieve a Network by it's ID\n",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Network"
+            }
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Token": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "object",
+          "description": "A map to store additional, application defined, metadata.\n"
+        },
+        "permissions": {
+          "type": "object",
+          "description": "A map of organization -> [permission] where each permission is a string constant.\n"
+        }
+      }
+    },
+    "Organization": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Network": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Node"
+          }
+        }
+      }
+    },
+    "Node": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
