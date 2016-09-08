@@ -14,10 +14,10 @@ Public platform onboarding
 ^^^^
 
 You can access Credits public cloud blockchain beta platform at `credits.works
-<https://credits.works>`_. Since this is a public platform you're welcome to
-register and use it without limitations. It is available free of charge for the
-time of beta testing and we will be issuing separate warnings before starting
-to charge for it.
+<https://credits.works>`_.
+
+The public PaaS is going through an upgrade to the most recent version of the
+blockchain core developed at Credits, and will be relaunched on 16th Sep 2016.
 
 G-Cloud platform onboarding
 ^^^^
@@ -34,12 +34,13 @@ How to interact with the system
 Once you have been ouboarded and received your API keys you will need to create your first blockchain network and
 start developing with it.
 
-The API for public PaaS is available at `public-api.credits.works <https://public-api.credits.works>`_, the G-Cloud API
-is available at `gcloud.credits.works <https://gcloud.credits.works>`_.
+The G-Cloud PaaS API is available at `gcloud.credits.works <https://gcloud.credits.works>`_.
+The public PaaS API will become available again after the relaunch.
 
 Further reading
 ====
 
+ - :ref:`PaaS API <paas-api>`.
  - very basics of `Credits blockchain functioning <blockchain.html>`_.
  - `Transactions <transaction.html>`_
  - `Interfaces <interfaces.html>`_

@@ -1,3 +1,5 @@
+.. _paas-api:
+
 PaaS API
 ========
 
