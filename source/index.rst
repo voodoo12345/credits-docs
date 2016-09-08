@@ -7,7 +7,7 @@ Welcome to Credits' cloud blockchain platform documentation!
 ====
 
 Here you will find all the information necessary to begin building and deploying your own blockchain networks.
-Start with `Getting started <getting-started.html>`_ manual.
+Start with :ref:`Getting started <getting-started>` manual.
 
 Contents:
 
