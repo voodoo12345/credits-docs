@@ -16,6 +16,8 @@ Contents:
 
    getting_started
    api
+   state
+   block
    blockchain
    transaction
    transform
