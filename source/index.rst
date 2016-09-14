@@ -15,6 +15,7 @@ Contents:
    :maxdepth: 2
 
    getting_started
+   common_library
    api
    state
    block
