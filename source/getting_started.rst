@@ -29,18 +29,20 @@ government agency. You can find more details about this process :ref:`here
 
 
 How to interact with the system
-====
+^^^^
 
-Once you have been ouboarded and received your API keys you will need to create your first blockchain network and
-start developing with it.
+Once you have been ouboarded and received your API keys you will need to create
+your first blockchain network and start developing with it. You will bedeveloping
+in Python using publicly accessible ``credits.common`` library.
 
 The G-Cloud PaaS API is available at `gcloud.credits.works <https://gcloud.credits.works>`_.
 The public PaaS API will become available again after the relaunch.
 
 Further reading
-====
+^^^^
 
  - :ref:`PaaS API <paas-api>`.
  - very basics of `Credits blockchain functioning <blockchain.html>`_.
+ - :ref:`Common library <common-library>`
  - `Transactions <transaction.html>`_
  - `Interfaces <interfaces.html>`_
