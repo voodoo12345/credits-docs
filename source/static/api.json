@@ -361,6 +361,223 @@
           }
         }
       }
+    },
+    "/node/{node_id}/status": {
+      "get": {
+        "tags": [
+          "node"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve blockchain node status by it's ID\n",
+        "description": "Retrieve blockchain node status by it's ID\n",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Node"
+            }
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/node/{node_id}/state/{hash}": {
+      "get": {
+        "tags": [
+          "node"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve blockchain state by it's hash\n",
+        "description": "Retrieve blockchain state by it's hash\n",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/node/{node_id}/block/{hash}": {
+      "get": {
+        "tags": [
+          "node"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve blockchain block by it's hash\n",
+        "description": "Retrieve blockchain block by it's hash\n",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/node/{node_id}/transaction": {
+      "post": {
+        "tags": [
+          "node"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "json",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Create blockchain transaction\n",
+        "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node\n",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/node/{node_id}/transaction/{hash}": {
+      "get": {
+        "tags": [
+          "node"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "hash",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve blockchain transaction by it's hash\n",
+        "description": "Retrieve blockchain transaction by it's hash\n",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "definitions": {
