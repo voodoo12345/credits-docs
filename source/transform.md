@@ -102,7 +102,7 @@ TR = BalanceTransform(
 # Note that we do nothing with the result as TR.verify() shouldn't return anything.
 result, error = TR.verify(STATE)
 if error is not None:
-	raise Exception(error)  # Handle error
+    raise Exception(error)  # Handle error
 
 result, error = TR.apply(STATE)
 if error is not None:
@@ -110,3 +110,31 @@ if error is not None:
 
 STATE = result  # result is the STATE with TR applied.
 ```
+
+# Other usecases
+
+Sometimes a balance transfer is not what is needed, instead the usecase is to store events, hashes or metadata on the 
+blockchain. In this case a simpler transform can be used
+
+```
+class LogHashTransform(Transform):
+    STATE_BALANCE = "core.credits.log.hashes"
+
+    def __init__(self, hash):
+        self.hash = hash
+
+    def verify(self, state):
+        if state[self.LOG_STATE][self.hash]:
+            return None, "Already have this hash logged!"
+        return None, None 
+
+    def apply(self, state):
+        state[self.LOG_STATE][self.hash] = {"logged_at": time.asctime()}
+        return state, None
+```
+
+This transform will first verify the hash is not already loaded. If it is loaded then it fails. When it comes to 
+application then it simply sets the hash against the time it was applied to the state of the world.
+
+This is a far simpler usecase as there is less input and less validation, but taking this idea a more complex KYC or logging
+system could easily be developed.
