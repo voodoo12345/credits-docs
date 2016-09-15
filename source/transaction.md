@@ -45,5 +45,5 @@ transaction = Transaction(
     ]
 )
 
-transaction.marshall()  # This output can be jsonified and POSTed to /api/v1/transaction
+payload = transaction.marshall()  # This output can be jsonified and POSTed to /api/v1/transaction
 ```
