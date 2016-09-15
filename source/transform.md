@@ -18,6 +18,8 @@ perform any verification that has to be performed "upon application". If this
 verification fails, the apply should fail and return an errornous result
 result.
 
+## Balance Transfer usecase
+
 Note: This is not a _complete_ Transform example, it has been reduced to show
 _just_ the verify and apply logic. If you need a working example you should
 import ```credits.transform.BalanceTransform``` and use that.
@@ -111,7 +113,7 @@ if error is not None:
 STATE = result  # result is the STATE with TR applied.
 ```
 
-# Other usecases
+## Other usecases
 
 Sometimes a balance transfer is not what is needed, instead the usecase is to store events, hashes or metadata on the 
 blockchain. In this case a simpler transform can be used
