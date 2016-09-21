@@ -27,7 +27,7 @@ from credits.address import CreditsAddressProvider
 
 
 class SingleKeyProof(Proof):
-    FQDN = 'works.credits.core.SingleKeyProof'
+    fqdn = 'works.credits.core.SingleKeyProof'
     STATE_NONCE = "works.credits.core.IntegerNonce"
 
     def __init__(self, address, nonce, challenge, verifying_key=None, signature=None):

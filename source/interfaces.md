@@ -8,20 +8,20 @@ converting these maps back into instances.
 
 ### FQDN
 Marshallable objects must contain a fully qualified domain name, this is used by
-the framework to resolve objects from serialised representations. The FQDN
+the framework to resolve objects from serialised representations. The fqdn
 should be made as an attribute of the implementor as either a class level
-variable or a property, either are acceptable. This FQDN will be used during the
+variable or a property, either are acceptable. This fqdn will be used during the
 unmarshalling process to locate an associated Class to instanciate.
 
 ```python
 class Foo:
-    FQDN = "fully.qualified.domain.name.Foo"
+    fqdn = "fully.qualified.domain.name.Foo"
 
 # OR
 
 class Bar:
     @property
-    def FQDN(self):
+    def fqdn(self):
         return "fully.qualified.domain.name.Bar"
 ```
 
@@ -37,7 +37,7 @@ Marshallable object should also marshall any of it's subcomponents.
 ```python
 def marshall(self) -> dict:
     return {
-        "fqdn": self.FQDN,
+        "fqdn": self.fqdn,
         "variable": 49,
         "subcomponent": self.subcomponent.marshall(),
     }
