@@ -642,6 +642,12 @@
         "name": {
           "type": "string"
         },
+        "date_created": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
         "nodes": {
           "type": "array",
           "items": {
@@ -656,7 +662,13 @@
         "id": {
           "type": "string"
         },
-        "hostname": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "network_id": {
           "type": "string"
         }
       }
