@@ -24,16 +24,18 @@
           "token"
         ],
         "summary": "Create a new Token.\n",
-        "description": "Create a new Token.\n",
+        "description": "Create a new access Token for later use in the `Authentication` HTTP header.\n",
         "parameters": [
           {
             "name": "email",
+            "description": "User's email.",
             "in": "formData",
             "type": "string",
             "required": true
           },
           {
             "name": "password",
+            "description": "User's password.",
             "in": "formData",
             "type": "string",
             "required": true
@@ -61,11 +63,12 @@
         "tags": [
           "token"
         ],
-        "summary": "Revoke a Token using it's api_key.\n",
-        "description": "Revoke a Token using it's api_key.\n",
+        "summary": "Revoke a Token.\n",
+        "description": "Revoke an access Token using it's api_key.\n",
         "parameters": [
           {
             "name": "api_key",
+            "description": "Access token to revoke.",
             "in": "formData",
             "type": "string",
             "required": true
@@ -87,22 +90,25 @@
           "user"
         ],
         "summary": "Create a new User.\n",
-        "description": "Create a new User.\n",
+        "description": "Create a new User and an organisation for this user.\n",
         "parameters": [
           {
             "name": "email",
+            "description": "User's email.",
             "in": "formData",
             "type": "string",
             "required": true
           },
           {
             "name": "organization_name",
+            "description": "System of the user's organisation. Allowed chars are lowercase letters, numbers and dashes.",
             "in": "formData",
             "type": "string",
             "required": true
           },
           {
             "name": "password",
+            "description": "User's password.",
             "in": "formData",
             "type": "string",
             "required": true
@@ -136,6 +142,7 @@
         "parameters": [
           {
             "name": "id",
+            "description": "User's ID.",
             "in": "path",
             "type": "string",
             "required": true
@@ -174,12 +181,14 @@
         "parameters": [
           {
             "name": "id",
+            "description": "User's ID.",
             "in": "path",
             "type": "string",
             "required": true
           },
           {
             "name": "password",
+            "description": "User's password.",
             "in": "formData",
             "type": "string",
             "required": false
@@ -213,23 +222,40 @@
             ]
           }
         ],
-        "summary": "Create a new Network.\n",
-        "description": "Create a new Network.\n",
+        "summary": "Create new Network.\n",
+        "description": "Create a new Blockchain Network consisting one or many nodes.\n",
         "parameters": [
           {
             "name": "name",
+            "description": "Network system name. Allowed chars are lowercase letters, numbers and dashes. Must be unique within the organisation.",
             "in": "formData",
             "type": "string",
             "required": true
           },
           {
             "name": "organization_id",
+            "description": "ID of the organisation network will belong to.",
             "in": "formData",
             "type": "string",
             "required": true
           },
           {
-            "name": "node_count",
+            "name": "state",
+            "description": "Initial state of the world for given blockchain. Please refer to `State` in the docs for more details.",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "module",
+            "description": "Module source code. I.e. your Transforms and Proofs written for this particular blockchain network implementation.",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "size",
+            "description": "Amount of nodes in the network, recommended between 3 and 7.",
             "in": "formData",
             "type": "integer",
             "required": true
@@ -266,6 +292,7 @@
         "parameters": [
           {
             "name": "id",
+            "description": "Network ID.",
             "in": "path",
             "type": "string",
             "required": true
@@ -307,6 +334,7 @@
         "parameters": [
           {
             "name": "node_id",
+            "description": "Node ID.",
             "in": "path",
             "type": "string",
             "required": true
@@ -348,18 +376,20 @@
         "parameters": [
           {
             "name": "node_id",
+            "description": "Node ID.",
             "in": "path",
             "type": "string",
             "required": true
           },
           {
             "name": "hash",
+            "description": "State hash.",
             "in": "path",
             "type": "string",
             "required": true
           }
         ],
-        "summary": "Retrieve blockchain state by it's hash\n",
+        "summary": "Retrieve blockchain state",
         "description": "Retrieve blockchain state by it's hash\n",
         "responses": {
           "200": {
@@ -392,18 +422,20 @@
         "parameters": [
           {
             "name": "node_id",
+            "description": "Node ID.",
             "in": "path",
             "type": "string",
             "required": true
           },
           {
             "name": "hash",
+            "description": "Block hash.",
             "in": "path",
             "type": "string",
             "required": true
           }
         ],
-        "summary": "Retrieve blockchain block by it's hash\n",
+        "summary": "Retrieve blockchain block",
         "description": "Retrieve blockchain block by it's hash\n",
         "responses": {
           "200": {
@@ -436,18 +468,20 @@
         "parameters": [
           {
             "name": "node_id",
+            "description": "Node ID.",
             "in": "path",
             "type": "string",
             "required": true
           },
           {
             "name": "json",
+            "description": "Marshalled transaction contents.",
             "in": "formData",
             "type": "string",
             "required": true
           }
         ],
-        "summary": "Create blockchain transaction\n",
+        "summary": "Create blockchain transaction",
         "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node\n",
         "responses": {
           "200": {
@@ -480,18 +514,20 @@
         "parameters": [
           {
             "name": "node_id",
+            "description": "Node ID.",
             "in": "path",
             "type": "string",
             "required": true
           },
           {
             "name": "hash",
+            "description": "Transaction hash.",
             "in": "path",
             "type": "string",
             "required": true
           }
         ],
-        "summary": "Retrieve blockchain transaction by it's hash\n",
+        "summary": "Retrieve blockchain transaction",
         "description": "Retrieve blockchain transaction by it's hash\n",
         "responses": {
           "200": {
