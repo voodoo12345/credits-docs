@@ -1,745 +1,1159 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Credits Services"
-  },
-  "host": "works.credits.vision",
-  "basePath": "/api/v1",
-  "schemes": [
-    "http",
-    "https"
-  ],
-  "securityDefinitions": {
-    "JWT": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    }
-  },
-  "paths": {
-    "/token": {
-      "post": {
-        "tags": [
-          "token"
-        ],
-        "summary": "Create a new Token.\n",
-        "description": "Create a new access Token for later use in the `Authentication` HTTP header.<br> The permissions field is a JSON string iterating all permissions granted to the user with this token on certain organisations. Expected format: `{\"org_id\": [\"permission0\", \"permission1\"]}`. May be an empty dictionary (like `{}`) if no organisation was created yet.<br> Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE",
-        "parameters": [
-          {
-            "name": "email",
-            "description": "User's email.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "password",
-            "description": "User's password.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "permissions",
-            "description": "User's permissions inside the organisation.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Token"
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Credits Services"
+    },
+    "host": "works.credits.vision",
+    "basePath": "/api/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "paths": {
+        "/token": {
+            "post": {
+                "tags": [
+                    "token"
+                ],
+                "summary": "Create a new Token.\n",
+                "description": "Create a new access Token for later use in the `Authentication` HTTP\nheader. The permissions field is a JSON string iterating all\npermissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "description": "User's email.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "description": "User's password.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "permissions",
+                        "description": "User's permissions inside the organisation.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "token"
+                ],
+                "summary": "Revoke a Token.\n",
+                "description": "Revoke the token attached to this request.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "token"
+                ],
+                "summary": "Update a token.\n",
+                "description": "Update this token with new permissions. The permissions field is a JSON string \niterating all permissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
+                "parameters": [
+                    {
+                        "name": "permissions",
+                        "description": "User's permissions inside the organisation. (as JSON)",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "400": {
-            "description": "Bad Input"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "token"
-        ],
-        "summary": "Revoke a Token.\n",
-        "description": "Revoke an access Token using it's api_key.\n",
-        "parameters": [
-          {
-            "name": "api_key",
-            "description": "Access token to revoke.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Create a new User.\n",
-        "description": "Create a new User and an organisation for this user.\n",
-        "parameters": [
-          {
-            "name": "email",
-            "description": "User's email.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "password",
-            "description": "User's password.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
+        },
+        "/user": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "Create a new User. A user might be disabled by default depending on the environment.\n",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "description": "User's email.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "description": "User's password.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "attributes",
+                        "in": "formData",
+                        "description": "User defined attributes. (Key value dictionary JSON string)",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Retrieve the current authenticated User's credentials.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "user"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Update the current authed User.\n",
+                "parameters": [
+                    {
+                        "name": "password",
+                        "description": "New password.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "attributes",
+                        "description": "User's attributes.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "400": {
-            "description": "Bad Input"
-          }
-        }
-      }
-    },
-    "/user/{id}": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "description": "User's ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve a User's credentials.\n",
-        "description": "Retrieve a User's credentials.\n",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
+        },
+        "/organization": {
+            "post": {
+                "tags": [
+                    "organization"
+                ],
+                "description": "Create a new organization and adds current user top it as an admin.\n",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "System name of organization. Lower case, 0-9, \"-\" allowed. Must be unique.\n",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "attributes",
+                        "description": "User defined attributes (key value dictionary JSON string).",
+                        "in": "formData",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Organization"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "summary": "Update a User's credentials.\n",
-        "description": "Update a User's credentials.\n",
-        "parameters": [
-          {
-            "name": "id",
-            "description": "User's ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "password",
-            "description": "User's password.",
-            "in": "formData",
-            "type": "string",
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
+        },
+        "/organization/{org_id}": {
+            "get": {
+                "tags": [
+                    "organization"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "org_id",
+                        "description": "Organization ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "description": "Get an organization\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Organization"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "organization"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Update an organization.\n",
+                "parameters": [
+                    {
+                        "name": "org_id",
+                        "description": "Organization ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "description": "Organization name.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "attributes",
+                        "description": "Organization attributes.",
+                        "type": "string",
+                        "in": "formData",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Organization"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "400": {
-            "description": "Bad Input"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/organisation": {
-      "get": {
-        "tags": [
-          "organisation"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "organization_name",
-            "description": "System of the user's organisation. Allowed chars are lowercase letters, numbers and dashes.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "id",
-            "description": "User's ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve a User's credentials.\n",
-        "description": "Retrieve a User's credentials.\n",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
+        },
+        "/network": {
+            "post": {
+                "tags": [
+                    "network"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Create new Network.\n",
+                "description": "Create a new Blockchain Network consisting one or many nodes.\n",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Network system name. Allowed chars are lowercase letters, numbers and dashes. Must be unique within the organisation.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "organization_id",
+                        "description": "ID of the organisation network will belong to.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "state",
+                        "description": "Initial state of the world for given blockchain. Key value dictionary JSON string Please refer to `State` in the docs for more details. ",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "module",
+                        "description": "Module source code. I.e. your Transforms and Proofs written for this particular blockchain network implementation in Python.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "size",
+                        "description": "Amount of nodes in the network, recommended between 3 and 7.",
+                        "in": "formData",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Network"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "summary": "Update a User's credentials.\n",
-        "description": "Update a User's credentials.\n",
-        "parameters": [
-          {
-            "name": "id",
-            "description": "User's ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "password",
-            "description": "User's password.",
-            "in": "formData",
-            "type": "string",
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
+        },
+        "/network/{network_id}": {
+            "get": {
+                "tags": [
+                    "network"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "network_id",
+                        "description": "Network ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Retrieve a Network by it's ID\n",
+                "description": "Retrieve a Network by it's ID\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Network"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "network"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Update network",
+                "description": "Update network module source code. No other network parameters can be updated.",
+                "parameters": [
+                    {
+                        "name": "network_id",
+                        "description": "Network ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "module",
+                        "description": "Module source code. I.e. your Transforms and Proofs written for this particular blockchain network implementation in Python.",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Network"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "network"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Destroy network",
+                "description": "Irreversibly destroys all network nodes and all data.\n",
+                "parameters": [
+                    {
+                        "name": "network_id",
+                        "description": "Network ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "400": {
-            "description": "Bad Input"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/network": {
-      "post": {
-        "tags": [
-          "network"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "summary": "Create new Network.\n",
-        "description": "Create a new Blockchain Network consisting one or many nodes.\n",
-        "parameters": [
-          {
-            "name": "name",
-            "description": "Network system name. Allowed chars are lowercase letters, numbers and dashes. Must be unique within the organisation.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "organization_id",
-            "description": "ID of the organisation network will belong to.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "state",
-            "description": "Initial state of the world for given blockchain. Please refer to `State` in the docs for more details.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "module",
-            "description": "Module source code. I.e. your Transforms and Proofs written for this particular blockchain network implementation.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "size",
-            "description": "Amount of nodes in the network, recommended between 3 and 7.",
-            "in": "formData",
-            "type": "integer",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Input"
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          }
-        }
-      }
-    },
-    "/network/{id}": {
-      "get": {
-        "tags": [
-          "network"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Network ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve a Network by it's ID\n",
-        "description": "Retrieve a Network by it's ID\n",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Network"
+        },
+        "/network/{network_id}/log/{node_id}": {
+            "get": {
+                "tags": [
+                    "network"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "network_id",
+                        "description": "Network ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "node_id",
+                        "description": "Node ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "start",
+                        "description": "Datetime to retrieve logs starting from. ISO 8601 format.",
+                        "in": "query",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "end",
+                        "description": "Datetime to retrieve logs up to. ISO 8601 format.",
+                        "in": "query",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "summary": "Retrieve node execution logs\n",
+                "description": "Retrieves execution logs from given node in the network for debugging purposes.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PlainLog"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/node/{node_id}/status": {
-      "get": {
-        "tags": [
-          "node"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "node_id",
-            "description": "Node ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve blockchain node status by it's ID\n",
-        "description": "Retrieve blockchain node status by it's ID\n",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Node"
+        },
+        "/node/{node_name}/api/v1/status": {
+            "get": {
+                "tags": [
+                    "node"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "node_name",
+                        "description": "Node ID.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Retrieve blockchain node status by it's name\n",
+                "description": "Retrieve blockchain node status by it's name\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/NodeStatus"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+        },
+        "/node/{node_name}/api/v1/transaction": {
+            "post": {
+                "tags": [
+                    "node"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "node_name",
+                        "description": "Node Name.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "json",
+                        "description": "The JSON marshall output of the transaction.",
+                        "in": "formData",
+                        "requied": true,
+                        "type": "string"
+                    }
+                ],
+                "summary": "Create blockchain transaction",
+                "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ResultObject"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/node/{node_name}/api/v1/transaction/{tx_hash}": {
+            "post": {
+                "tags": [
+                    "node"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "node_name",
+                        "description": "Node Name.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "tx_hash",
+                        "description": "Transaction hash.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "summary": "Get transaction",
+                "description": "Get transaction from the blockchain node by it's hash.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ResultObject"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/node/{node_name}/api/v1/state/{height}": {
+            "get": {
+                "tags": [
+                    "node"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "node_name",
+                        "description": "Node name.",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "height",
+                        "description": "Blockchain height.",
+                        "in": "path",
+                        "type": "number",
+                        "required": true
+                    }
+                ],
+                "summary": "Retrieve blockchain state",
+                "description": "Retrieve blockchain state by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). State contents are defined at runtime by the user implementation.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ResultObject"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/node/{node_name}/api/v1/block/{height}": {
+            "get": {
+                "tags": [
+                    "node"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "node_name",
+                        "description": "Node Name",
+                        "in": "path",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "height",
+                        "description": "Block height.",
+                        "in": "path",
+                        "type": "number",
+                        "required": true
+                    }
+                ],
+                "summary": "Retrieve blockchain block",
+                "description": "Retrieve blockchain block by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). \n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ResultObject"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication Required",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Access Denied",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
-      }
     },
-    "/node/{node_id}/state/{hash}": {
-      "get": {
-        "tags": [
-          "node"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "node_id",
-            "description": "Node ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "hash",
-            "description": "State hash.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve blockchain state",
-        "description": "Retrieve blockchain state by it's hash\n",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/node/{node_id}/block/{hash}": {
-      "get": {
-        "tags": [
-          "node"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "node_id",
-            "description": "Node ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "hash",
-            "description": "Block hash.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve blockchain block",
-        "description": "Retrieve blockchain block by it's hash\n",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/node/{node_id}/transaction": {
-      "post": {
-        "tags": [
-          "node"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "node_id",
-            "description": "Node ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "json",
-            "description": "Marshalled transaction contents.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Create blockchain transaction",
-        "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node\n",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/node/{node_id}/transaction/{hash}": {
-      "get": {
-        "tags": [
-          "node"
-        ],
-        "security": [
-          {
-            "JWT": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "node_id",
-            "description": "Node ID.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "hash",
-            "description": "Transaction hash.",
-            "in": "path",
-            "type": "string",
-            "required": true
-          }
-        ],
-        "summary": "Retrieve blockchain transaction",
-        "description": "Retrieve blockchain transaction by it's hash\n",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Authentication Required"
-          },
-          "403": {
-            "description": "Access Denied"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "Token": {
-      "type": "object",
-      "properties": {
-        "api_key": {
-          "type": "string"
-        },
-        "date_created":  {
-          "type": "datetime"
-        },
-        "date_expiry":  {
-          "type": "datetime"
-        },
-        "date_notbefore":  {
-          "type": "datetime"
-        },
-        "id":  {
-          "type": "string"
-        }
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "attributes": {
-          "type": "object",
-          "description": "A map to store additional, application defined, metadata.\n"
-        },
-        "permissions": {
-          "type": "object",
-          "description": "A map of organization -> [permission] where each permission is a string constant.\n"
-        }
-      }
-    },
-    "Organization": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "networks": {
-          "type": "array",
-          "items": {
+    "definitions": {
+        "Token": {
             "type": "object",
             "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              }
+                "api_key": {
+                    "type": "string"
+                },
+                "date_created": {
+                    "type": "string"
+                },
+                "date_expiry": {
+                    "type": "string"
+                },
+                "date_notbefore": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
             }
-          }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "attributes": {
+                    "type": "object",
+                    "description": "A map to store additional, application defined, metadata.\n"
+                },
+                "permissions": {
+                    "type": "object",
+                    "description": "A map of organization -> [permission] where each permission is a string constant.\n"
+                }
+            }
+        },
+        "Organization": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "networks": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Network": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "date_created": {
+                    "type": "string"
+                },
+                "organization_id": {
+                    "type": "string"
+                },
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Node"
+                    }
+                }
+            }
+        },
+        "Node": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "network_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "NodeStatus": {
+            "type": "object",
+            "properties": {
+                "height": {
+                    "type": "number"
+                },
+                "unconfirmed_transactions": {
+                    "type": "number"
+                }
+            }
+        },
+        "ResultObject": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "contents": {
+                    "type": "object"
+                }
+            }
+        },
+        "PlainLog": {
+            "type": "string"
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
         }
-      }
-    },
-    "Network": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "date_created": {
-          "type": "string"
-        },
-        "organization_id": {
-          "type": "string"
-        },
-        "nodes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Node"
-          }
-        }
-      }
-    },
-    "Node": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "address": {
-          "type": "string"
-        },
-        "network_id": {
-          "type": "string"
-        }
-      }
     }
-  }
 }
