@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "1.0.1",
+        "version": "1.0.2",
         "title": "Credits Services"
     },
     "host": "public.credits.works",
@@ -291,7 +291,7 @@
                 "tags": [
                     "organization"
                 ],
-                "description": "Create a new organization and adds current user top it as an admin.\n",
+                "description": "Creates a new organization and adds current user to it as an admin.\n",
                 "parameters": [
                     {
                         "name": "name",
@@ -391,7 +391,8 @@
                         "JWT": []
                     }
                 ],
-                "description": "Update an organization.\n",
+                "summary": "Update organization.\n",
+                "description": "Update organization attributes. System name cannot be changed.\n",
                 "parameters": [
                     {
                         "name": "org_id",
@@ -399,13 +400,6 @@
                         "in": "path",
                         "type": "string",
                         "required": true
-                    },
-                    {
-                        "name": "name",
-                        "description": "Organization name.",
-                        "in": "formData",
-                        "type": "string",
-                        "required": false
                     },
                     {
                         "name": "attributes",
