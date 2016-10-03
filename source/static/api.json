@@ -24,7 +24,7 @@
           "token"
         ],
         "summary": "Create a new Token.\n",
-        "description": "Create a new access Token for later use in the `Authentication` HTTP header.\n",
+        "description": "Create a new access Token for later use in the `Authentication` HTTP header.<br> The permissions field is a JSON string iterating all permissions granted to the user with this token on certain organisations. Expected format: `{\"org_id\": [\"permission0\", \"permission1\"]}`. May be an empty dictionary (like `{}`) if no organisation was created yet.<br> Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE",
         "parameters": [
           {
             "name": "email",
@@ -36,6 +36,13 @@
           {
             "name": "password",
             "description": "User's password.",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "permissions",
+            "description": "User's permissions inside the organisation.",
             "in": "formData",
             "type": "string",
             "required": true
@@ -100,13 +107,6 @@
             "required": true
           },
           {
-            "name": "organization_name",
-            "description": "System of the user's organisation. Allowed chars are lowercase letters, numbers and dashes.",
-            "in": "formData",
-            "type": "string",
-            "required": true
-          },
-          {
             "name": "password",
             "description": "User's password.",
             "in": "formData",
@@ -140,6 +140,96 @@
           }
         ],
         "parameters": [
+          {
+            "name": "id",
+            "description": "User's ID.",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "summary": "Retrieve a User's credentials.\n",
+        "description": "Retrieve a User's credentials.\n",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Authentication Required"
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "summary": "Update a User's credentials.\n",
+        "description": "Update a User's credentials.\n",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "User's ID.",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "description": "User's password.",
+            "in": "formData",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Input"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/organisation": {
+      "get": {
+        "tags": [
+          "organisation"
+        ],
+        "security": [
+          {
+            "JWT": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_name",
+            "description": "System of the user's organisation. Allowed chars are lowercase letters, numbers and dashes.",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
           {
             "name": "id",
             "description": "User's ID.",
@@ -551,6 +641,18 @@
       "type": "object",
       "properties": {
         "api_key": {
+          "type": "string"
+        },
+        "date_created":  {
+          "type": "datetime"
+        },
+        "date_expiry":  {
+          "type": "datetime"
+        },
+        "date_notbefore":  {
+          "type": "datetime"
+        },
+        "id":  {
           "type": "string"
         }
       }
