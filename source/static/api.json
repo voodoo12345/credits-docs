@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "1.0.2",
+        "version": "1.0.3",
         "title": "Credits Services"
     },
     "host": "public.credits.works",
@@ -23,7 +23,7 @@
                 "tags": [
                     "token"
                 ],
-                "summary": "Create a new Token.\n",
+                "summary": "Create token",
                 "description": "Create a new access Token for later use in the `Authentication` HTTP\nheader. The permissions field is a JSON string iterating all\npermissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
                 "parameters": [
                     {
@@ -79,7 +79,7 @@
                 "tags": [
                     "token"
                 ],
-                "summary": "Revoke a Token.\n",
+                "summary": "Revoke token",
                 "description": "Revoke the token attached to this request.\n",
                 "responses": {
                     "200": {
@@ -109,7 +109,7 @@
                 "tags": [
                     "token"
                 ],
-                "summary": "Update a token.\n",
+                "summary": "Update token",
                 "description": "Update this token with new permissions. The permissions field is a JSON string \niterating all permissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
                 "parameters": [
                     {
@@ -150,6 +150,7 @@
                 "tags": [
                     "user"
                 ],
+                "summary": "Create user",
                 "description": "Create a new User. A user might be disabled by default depending on the environment.\n",
                 "parameters": [
                     {
@@ -198,6 +199,7 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get user",
                 "description": "Retrieve the current authenticated User's credentials.\n",
                 "responses": {
                     "200": {
@@ -235,7 +237,8 @@
                         "JWT": []
                     }
                 ],
-                "description": "Update the current authed User.\n",
+                "summary": "Update user",
+                "description": "Update the current authenticated User.\n",
                 "parameters": [
                     {
                         "name": "password",
@@ -291,6 +294,7 @@
                 "tags": [
                     "organization"
                 ],
+                "summary": "Create organization",
                 "description": "Creates a new organization and adds current user to it as an admin.\n",
                 "parameters": [
                     {
@@ -345,6 +349,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get organization",
+                "description": "Retrieves an organization by it's ID.\n",
                 "parameters": [
                     {
                         "name": "org_id",
@@ -354,7 +360,6 @@
                         "required": true
                     }
                 ],
-                "description": "Get an organization\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -391,7 +396,7 @@
                         "JWT": []
                     }
                 ],
-                "summary": "Update organization.\n",
+                "summary": "Update organization",
                 "description": "Update organization attributes. System name cannot be changed.\n",
                 "parameters": [
                     {
@@ -453,7 +458,7 @@
                         "JWT": []
                     }
                 ],
-                "summary": "Create new Network.\n",
+                "summary": "Create network",
                 "description": "Create a new Blockchain Network consisting one or many nodes.\n",
                 "parameters": [
                     {
@@ -530,6 +535,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get network",
+                "description": "Retrieve a Network by it's ID\n",
                 "parameters": [
                     {
                         "name": "network_id",
@@ -539,8 +546,6 @@
                         "required": true
                     }
                 ],
-                "summary": "Retrieve a Network by it's ID\n",
-                "description": "Retrieve a Network by it's ID\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -683,6 +688,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get node logs",
+                "description": "Retrieves execution logs from given node in the network for debugging purposes.\n",
                 "parameters": [
                     {
                         "name": "network_id",
@@ -713,8 +720,6 @@
                         "required": false
                     }
                 ],
-                "summary": "Retrieve node execution logs\n",
-                "description": "Retrieves execution logs from given node in the network for debugging purposes.\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -753,6 +758,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get node status",
+                "description": "Retrieve blockchain node status by it's name.\n",
                 "parameters": [
                     {
                         "name": "node_name",
@@ -762,8 +769,6 @@
                         "required": true
                     }
                 ],
-                "summary": "Retrieve blockchain node status by it's name\n",
-                "description": "Retrieve blockchain node status by it's name\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -802,6 +807,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Create transaction",
+                "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node.",
                 "parameters": [
                     {
                         "name": "node_name",
@@ -818,8 +825,6 @@
                         "type": "string"
                     }
                 ],
-                "summary": "Create blockchain transaction",
-                "description": "Create transaction in the blockchain by posting it's stringified JSON marshalled contents to the node.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -852,6 +857,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get transaction",
+                "description": "Get transaction from the blockchain node by it's hash.",
                 "parameters": [
                     {
                         "name": "node_name",
@@ -868,8 +875,6 @@
                         "required": true
                     }
                 ],
-                "summary": "Get transaction",
-                "description": "Get transaction from the blockchain node by it's hash.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -902,6 +907,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get blockchain state",
+                "description": "Retrieve blockchain state by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). State contents are defined at runtime by the user implementation.\n",
                 "parameters": [
                     {
                         "name": "node_name",
@@ -918,8 +925,6 @@
                         "required": true
                     }
                 ],
-                "summary": "Retrieve blockchain state",
-                "description": "Retrieve blockchain state by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). State contents are defined at runtime by the user implementation.\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -958,6 +963,8 @@
                         "JWT": []
                     }
                 ],
+                "summary": "Get blockchain block",
+                "description": "Retrieve blockchain block by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). \n",
                 "parameters": [
                     {
                         "name": "node_name",
@@ -974,8 +981,6 @@
                         "required": true
                     }
                 ],
-                "summary": "Retrieve blockchain block",
-                "description": "Retrieve blockchain block by it's numeric height, provide 'head' for current height. Negative numbers track backwards from head. Positive numbers track forward from 0th block (genesis). \n",
                 "responses": {
                     "200": {
                         "description": "OK",
