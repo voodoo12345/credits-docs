@@ -13,11 +13,8 @@ domains.
 Public platform onboarding
 ^^^^
 
-You can access Credits public cloud blockchain beta platform at `credits.works
-<https://credits.works>`_.
-
-The public PaaS is going through an upgrade to the most recent version of the
-blockchain core developed at Credits, and will be relaunched on 21th Sep 2016.
+You can access Credits public cloud blockchain beta platform at `public.credits.works
+<https://public.credits.works>`_.
 
 G-Cloud platform onboarding
 ^^^^
