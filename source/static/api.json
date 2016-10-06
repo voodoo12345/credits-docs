@@ -763,7 +763,7 @@
                 "parameters": [
                     {
                         "name": "node_name",
-                        "description": "Node ID.",
+                        "description": "Node name as provided in the GET network result.",
                         "in": "path",
                         "type": "string",
                         "required": true
