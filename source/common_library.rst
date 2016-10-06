@@ -7,7 +7,7 @@ Common library
 Install
 ^^^^
 
-Common library is available through PyPI as ``credits.common``. To install run:::
+Common library is available through PyPI as ``credits.common``. To install run::
 
     pip install credits.common
 
