@@ -20,11 +20,7 @@ Contents:
    common_library
    api
    blockchain
-   block
-   state
-   transaction
-   transform
-   proof
+   transactions
    interfaces
 
 
