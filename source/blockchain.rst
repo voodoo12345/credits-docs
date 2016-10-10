@@ -3,8 +3,12 @@
 Blockchain
 ==========
 
-The Credits blockchain consists of cryptographically connected blocks and states.
-
+The Credits Blockchain Framework as an application is a distributed service that runs across
+multiple servers called :ref:`Nodes <architecture-blockchain-node>`. Every node holds a copy
+of the Credits blockchain as a data structure. This data structure consists of cryptographically
+connected :ref:`Blocks <blockchain-block>` and :ref:`States <blockchain-state>`. New blocks and
+states are added to the blochchain by :ref:`applying transactions <blockchain-applying-transactions>`
+and electing the best blocks through node :ref:`consensus <blockchain-consensus>`.
 
 .. _blockchain-state:
 
@@ -55,8 +59,9 @@ place as the creator of the block and then apply the transactions.
 Applying transactions
 ^^^^^^^^^^^^^^^^^^^^^
 
-Applying transactions means to execute a transaction's transform against the current global state
-and get the next global state. Consider same global state as above:
+Applying a transaction means to execute the :ref:`Transform <transform>` contained
+inside transaction against the current global state and get the next global state.
+Consider same global state as above:
 
 .. code-block:: json
 

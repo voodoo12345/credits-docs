@@ -41,9 +41,8 @@ Further reading
 ^^^^^^^^^^^^^^^
 
  - :ref:`Step by step blockchain creation guide <step-by-step>`.
- - :ref:`PaaS API <paas-api>`
  - very basics of :ref:`Credits blockchain <blockchain>` mechanics
- - :ref:`Common library <common-library>`
- - :ref:`Transactions <transaction>`
+ - :ref:`Transactions <transactions-transforms-proofs>`
  - :ref:`Interfaces <interfaces>`
+ - :ref:`PaaS API <paas-api>`
 

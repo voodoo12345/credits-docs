@@ -1,7 +1,9 @@
-.. _transaction:
+.. _transactions-transforms-proofs:
 
 Transactions, transforms and proofs
 ===================================
+
+.. _transaction:
 
 Transaction
 ^^^^^^^^^^^
