@@ -1,7 +1,7 @@
 .. _transactions-transforms-proofs:
 
-Transactions, transforms and proofs
-===================================
+Transactions, transforms, proofs
+================================
 
 .. _transaction:
 

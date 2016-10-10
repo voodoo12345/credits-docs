@@ -4,25 +4,24 @@ Step by step guide
 ==================
 
 
-To create a custom permissioned Credits blockchain you will need to do this:
+To create a custom permissioned Credits blockchain you will need to go through these steps:
 
- - create required transforms, proofs, transactions and other code
- - test and verify vailidity of the code in your local dev environment
- - get yourself a blockchain network
- - upload the code to your network and let it execute
+ - create required transforms, proofs and transactions
+ - test and verify validity of the code in your local dev environment
+ - start your personal blockchain network
+ - upload the code to your network and put it into execution
  - create your client application using the same transactions
  - hook your client to the network via node API and start transacting on the blockchain
 
 
-Create required transforms
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Create transforms and other source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Your transforms should implement ``credits.transform.Transform``, see the
-:ref:`Transform <transform>` documentation for specifics. Once you have written your
-Transforms you may want to test their validity before publishing them to the PAAS.
+:ref:`Transform <transform>` documentation for specifics.
 
-Create local testing environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Test and verify your transforms locally
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To test your applications, you can use some helper functions located in ``credits.test``. To test Transforms you can use
 ``credits.test.check_transform()``. ``check_transform()`` will run a collection of tests against your transform to both

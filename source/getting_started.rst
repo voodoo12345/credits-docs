@@ -21,8 +21,8 @@ G-Cloud platform onboarding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to sign-up for our G-Cloud offering, you will need to go through our
-onboarding process, including verifying your organization as a qualified UK
-government agency. You can find more details about this process :ref:`here <gcloud-onboarding-process>`.
+:ref:`onboarding process <gcloud-onboarding-process>`, including verifying your
+organization as a qualified UK government agency.
 
 
 How to interact with the system
@@ -30,7 +30,7 @@ How to interact with the system
 
 Once you have registered with public API (or received API keys from us for GCloud)
 you will need to create your first blockchain network and start developing with it.
-You will bedeveloping in Python using publicly accessible ``credits.common`` library.
+You will be developing in Python using publicly accessible ``credits.common`` library.
 
 The public PaaS API is available at `public.credits.works <https://public.credits.works/api/v1/status>`_.
 
@@ -40,7 +40,8 @@ The G-Cloud PaaS API is available at `gcloud.credits.works <https://gcloud.credi
 Further reading
 ^^^^^^^^^^^^^^^
 
- - :ref:`Step by step blockchain creation guide <step-by-step>`.
+ - :ref:`system architecture <system-architecture>` overview
+ - :ref:`step by step <step-by-step>` custom blockchain creation guide
  - very basics of :ref:`Credits blockchain <blockchain>` mechanics
  - :ref:`Transactions <transactions-transforms-proofs>`
  - :ref:`Interfaces <interfaces>`

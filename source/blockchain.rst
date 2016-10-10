@@ -3,7 +3,7 @@
 Blockchain
 ==========
 
-The Credits Blockchain Framework as an application is a distributed service that runs across
+The Credits Blockchain Framework as an application is a distributed software service that runs across
 multiple servers called :ref:`Nodes <architecture-blockchain-node>`. Every node holds a copy
 of the Credits blockchain as a data structure. This data structure consists of cryptographically
 connected :ref:`Blocks <blockchain-block>` and :ref:`States <blockchain-state>`. New blocks and
