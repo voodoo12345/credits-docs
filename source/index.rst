@@ -19,9 +19,9 @@ Contents:
    step_by_step_guide
    common_library
    api
-   state
-   block
    blockchain
+   block
+   state
    transaction
    transform
    proof
