@@ -15,6 +15,7 @@ Contents:
    :maxdepth: 2
 
    getting_started
+   architecture_overview
    step_by_step_guide
    common_library
    api
