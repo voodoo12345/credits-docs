@@ -13,13 +13,27 @@ To create a custom permissioned Credits blockchain you will need to do this:
  - create your client application using the same transactions
  - hook your client to the network via node API and start transacting on the blockchain
 
+
 Create required transforms
 ^^^^
 
+Your transforms should implement ``credits.transform.Transform``. If you are using an IDE like PyCharm, your IDE should
+give you a hint to implement missing abstract methods provided by Transform. See the Transform
+:ref:`Transform <transform>` documentation for specifics. Once you have written your Transforms you may want to test
+their validity before publishing them to the PAAS.
 
 Create local testing environment
 ^^^^
 
+To test your applications, you can use some helper functions located in ``credits.test``. To test Transforms you can use
+``credits.test.check_transform()``. ``check_transform()`` will run a collection of tests against your transform to both
+verify it has explicitly met the requirements of ``credits.transform.Transform`` and that all functions execute as 
+expected. To see a working example of how to use ``check_transform()`` see: checktransform.py_.
+
+Note that check_transform is not a substitute for standard Unit Testing, you should also perform your own unit testing
+of your Transform's ``verify()`` and ``apply()`` functions to check that all potential outcomes are covered.
+
+.. _checktransform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/checktransform.py
 
 Get a blockchain network and upload your code
 ^^^^
