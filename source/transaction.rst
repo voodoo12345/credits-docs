@@ -1,7 +1,7 @@
 .. _transaction:
 
 Transaction
-====
+===========
 
 Transactions are an :ref:`Applicable <interfaces-applicable>`, :ref:`Marshallable <interfaces-marshallable>`, and
 :ref:`Hashable <interfaces-hashable>` object. Transactions are the unit

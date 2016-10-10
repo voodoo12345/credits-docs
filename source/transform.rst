@@ -1,7 +1,7 @@
 .. _transform:
 
 Transform
-====
+=========
 
 Transform is an :ref:`Applicable <interfaces-applicable>`, :ref:`Marshallable <interfaces-marshallable>` and
 :ref:`Hashable <interfaces-hashable>` object.  Transforms are constructed with all
@@ -21,8 +21,8 @@ perform any verification that has to be performed "upon application". If this
 verification fails, the apply should fail and return an errornous result
 result.
 
-Balance Transfer usecase
-^^^^
+Balance Transfer use case
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Note: This is not a *complete* Transform example, it has been reduced to show
 *just* the verify and apply logic. If you need a working example you should
@@ -119,8 +119,8 @@ import ``credits.transform.BalanceTransform`` and use that.
     STATE = result  # result is the STATE with TR applied.
 
 
-Other usecases
-^^^^
+Other use cases
+^^^^^^^^^^^^^^^
 
 Sometimes a balance transfer is not what is needed, instead the usecase is to store events, hashes or metadata on the 
 blockchain. In this case a simpler transform can be used:

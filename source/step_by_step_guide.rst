@@ -1,7 +1,7 @@
 .. _step-by-step:
 
 Step by step guide
-====
+==================
 
 
 To create a custom permissioned Credits blockchain you will need to do this:
@@ -15,15 +15,14 @@ To create a custom permissioned Credits blockchain you will need to do this:
 
 
 Create required transforms
-^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Your transforms should implement ``credits.transform.Transform``. If you are using an IDE like PyCharm, your IDE should
-give you a hint to implement missing abstract methods provided by Transform. See the Transform
-:ref:`Transform <transform>` documentation for specifics. Once you have written your Transforms you may want to test
-their validity before publishing them to the PAAS.
+Your transforms should implement ``credits.transform.Transform``, see the
+:ref:`Transform <transform>` documentation for specifics. Once you have written your
+Transforms you may want to test their validity before publishing them to the PAAS.
 
 Create local testing environment
-^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To test your applications, you can use some helper functions located in ``credits.test``. To test Transforms you can use
 ``credits.test.check_transform()``. ``check_transform()`` will run a collection of tests against your transform to both
@@ -36,7 +35,7 @@ of your Transform's ``verify()`` and ``apply()`` functions to check that all pot
 .. _checktransform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/checktransform.py
 
 Get a blockchain network and upload your code
-^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The easiest way to do this is to use our public PaaS, which is at the moment avaialable for free.
 You can register via the REST API and get a running network in few HTTP requests.
@@ -54,14 +53,14 @@ Also the PaaS registration and network bootstrap guide will not apply in this ca
 PaaS selfservice network creation steps.
 
 Register an account
-----
+-------------------
 ::
 
     curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" \
         -F "attributes={}" https://gcloud.credits.works/api/v1/user
 
 Create access token
-----
+-------------------
 ::
 
     curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" \
@@ -71,7 +70,8 @@ In the result of this request you'll need the ``api_key`` field. This will be yo
 further requests.
 
 Create organisation
-----
+-------------------
+
 Organisation ID returned in this response will be needed in further requests. You can retrieve it again
 through ``GET /api/v1/user`` endpoint.
 ::
@@ -80,7 +80,8 @@ through ``GET /api/v1/user`` endpoint.
         -F "attributes={}" https://gcloud.credits.works/api/v1/organization
 
 Patch token
-----
+-----------
+
 After creating the organisation you need to patch your token with access to it. By default you would probably want to
 add all permissions at once, however in more complex access cases you may have different tokens with specific
 access rights configured on each.
@@ -90,7 +91,8 @@ access rights configured on each.
         https://gcloud.credits.works/api/v1/token
 
 Create network
-----
+--------------
+
 Assuming you have already developed and tested locally your transforms you can provide it to bootstrap your blockchain.
 Please notice that module inclusion is a path to file. You need to supply the module contents unescaped and fully
 intact including the linebreaks, so it's not possible to include it's contents directly into the ``curl`` call.
@@ -101,7 +103,8 @@ intact including the linebreaks, so it's not possible to include it's contents d
         https://gcloud.credits.works/api/v1/network
 
 Check node names
-----
+----------------
+
 Network creation takes some time, and once it's done you'll be able to retrieve node names needed in further queries.
 ::
 
@@ -109,7 +112,8 @@ Network creation takes some time, and once it's done you'll be able to retrieve 
         https://gcloud.credits.works/api/v1/network/<your_network_id>
 
 Check node status
-----
+-----------------
+
 In the node api notice the fact that effectively we're querying the nodes directly, however these calls need to
 be proxied through the main API for access control, and thus we need to supply ``/api/v1/node/<your_node_name>`` as
 the path to the target node and then ``/api/v1/status`` as the actual method call within that node's API.

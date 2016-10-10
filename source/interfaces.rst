@@ -1,12 +1,12 @@
 .. _interfaces:
 
 Interfaces
-====
+==========
 
 .. _interfaces-marshallable:
 
 Marshallable
-^^^^
+^^^^^^^^^^^^
 
 The Marshallable interface provides the nessasary methods to convert fully
 realised instances into more primative maps and to reverse the process by
@@ -35,7 +35,7 @@ unmarshalling process to locate an associated Class to instanciate.
             return "fully.qualified.domain.name.Bar"
 
 marshall
-----
+--------
 
 Marshalling is the process of converting a instance into a map of primative
 variables which can be then serialized. This allows libraries like ``json`` and
@@ -57,7 +57,7 @@ Marshallable object should also marshall any of it's subcomponents.
 
 
 unmarshall
-----
+----------
 
 Once a marshalled object has been recieved, the unmarshall method may be used to
 reverse the process. Like marshalling, unmarshalling should also be performed on
@@ -80,13 +80,13 @@ all subcomponents to fully resolve the object.
 .. _interfaces-applicable:
 
 Applicable
-^^^^
+^^^^^^^^^^
 
 The ``Applicable`` interface provides the nessasary methods for objects to
 perform manipulations against state.
 
 verify
-----
+------
 
 The ``verify`` method should accept State and verify if the implementor is
 capable of manipulating state either immediately or in the future. If
@@ -105,7 +105,7 @@ verification failed.
         return None, None  # Nothing to return, but no error.
 
 apply
-----
+-----
 
 The ``apply`` method should manipulate and return state. In the event of an
 error, return an errornous Result.
@@ -124,8 +124,9 @@ error, return an errornous Result.
 
 
 .. _interfaces-signable:
+
 Signable
-^^^^
+^^^^^^^^
 
 The ``Signable`` interface provides a single method to take an unsigned object
 and return a signed version.
@@ -139,6 +140,7 @@ the implementor with both the signature and the associated
 ``credits.key.VerifyingKey``. These additional variables can then for example
 be used in conjunction with the ``Applicable.verify`` method to check if the
 implementor has been signed.
+
 .. code-block:: python
    :linenos:
 
@@ -158,7 +160,7 @@ implementor has been signed.
 .. _interfaces-hashable:
 
 Hashable
-^^^^
+^^^^^^^^
 
 The ``Hashable`` interface provides a single method to provide a cryptographic
 hash of the implementor.

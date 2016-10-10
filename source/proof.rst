@@ -1,7 +1,7 @@
 .. _proof:
 
 Proof
-====
+=====
 
 Proof is an :ref:`Applicable <interfaces-applicable>` object requiring both ``verify`` and
 ``apply`` methods implemented. Proofs are constructed with some sort of resolvable

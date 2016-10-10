@@ -3,7 +3,7 @@
 .. _blockchain-general:
 
 Blockchain
-====
+==========
 
 Building from state and blocks a chain can be established. Because credits has intermediate states its not a direct link
 from block to block, instead a block is formed from a state, and then the application of that block forms a new state.

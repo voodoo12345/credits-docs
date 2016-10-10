@@ -1,4 +1,4 @@
-.. _gcloud-reference-label:
+.. _gcloud-onboarding-process:
 
 Government Agencies Onboarding
 ==============================

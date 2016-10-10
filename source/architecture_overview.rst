@@ -1,7 +1,7 @@
 .. _architecture-overview:
 
 Application architectures
-====
+=========================
 
 This is the overview of possible architectures of an end user application built on top of the Credits blockchain.
 
@@ -9,7 +9,7 @@ The blockchain application architectures can be viewed from two angles - the dep
 node ownership angle.
 
 Deployment options
-^^^^
+^^^^^^^^^^^^^^^^^^
 
 You may deploy your private blockchain in the Credits PaaS cloud system, within your own infrastructure or as a mixture
 of both. PaaS deployments are the simplest way and are most suitable for early stage development and simpler
@@ -25,14 +25,14 @@ other parts are hosted at Credits PaaS cloud might be useful in case of multiown
 control and cost effectiveness are critical.
 
 Ownership options
-^^^^
+^^^^^^^^^^^^^^^^^
 
 When talking about ownership we always mean control over blockchain nodes.
 In case of single ownership the
 
 
 Cloud single owner blockchain
-^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Simplest scenario is when the blockchain is hosted on the public PaaS cloud we're offering. In this case you don't
 need to worry about the hosting and support of your blockchain backend and only build and deliver your application to
@@ -84,7 +84,7 @@ still under full control of one party.
 
 
 Mixed hosting blockchain
-^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 More advanced scenario
 

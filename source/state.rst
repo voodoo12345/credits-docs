@@ -1,7 +1,7 @@
 .. _blockchain-state:
 
 State
-====
+=====
 
 State is simply just a key value map of data. Credits has one global state object, this is comprised of many different
 smaller states. There can be multiple different states that can contain any information, all that is important is that

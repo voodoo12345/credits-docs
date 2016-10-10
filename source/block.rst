@@ -1,7 +1,7 @@
 .. _blockchain-block:
 
 Block
-====
+=====
 
 In the simplest terms a block is just a collection of transactions.  Blocks are formed by taking unconfirmed
 transactions that are valid and making a block that contains these transactions.  Once the block is formed it is
