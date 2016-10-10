@@ -1,4 +1,4 @@
-.. _state:
+.. _blockchain-state:
 
 State
 ====

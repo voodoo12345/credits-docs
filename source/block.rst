@@ -1,4 +1,4 @@
-.. _block:
+.. _blockchain-block:
 
 Block
 ====

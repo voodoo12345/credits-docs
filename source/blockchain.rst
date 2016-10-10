@@ -1,5 +1,7 @@
 .. _blockchain:
 
+.. _blockchain-general:
+
 Blockchain
 ====
 

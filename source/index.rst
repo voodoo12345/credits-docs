@@ -17,9 +17,9 @@ Contents:
    getting_started
    common_library
    api
-   state
-   block
    blockchain
+   block
+   state
    transaction
    transform
    proof
