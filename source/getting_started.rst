@@ -14,8 +14,9 @@ Public platform onboarding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can access Credits public cloud blockchain beta platform at
-`public.credits.works <https://public.credits.works/>`_. You can signup directly via
-the platform API itself following :ref:`PaaS API documentation <paas-api>`.
+`public.credits.works <https://public.credits.works/api/v1/status>`_.
+You can signup directly via the platform API itself following
+:ref:`PaaS API documentation <paas-api>`.
 
 G-Cloud platform onboarding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,4 +47,5 @@ Further reading
  - :ref:`Transactions <transactions-transforms-proofs>`
  - :ref:`Interfaces <interfaces>`
  - :ref:`PaaS API <paas-api>`
+ - :ref:`Node API <node-api>`
 

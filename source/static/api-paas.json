@@ -837,6 +837,23 @@
                 }
             }
         },
+        "Node": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "network_id": {
+                    "type": "string"
+                }
+            }
+        },
         "ResultObject": {
             "type": "object",
             "properties": {
