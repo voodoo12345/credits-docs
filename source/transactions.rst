@@ -8,15 +8,15 @@ Transactions, transforms, proofs
 Transaction
 ^^^^^^^^^^^
 
-Transaction is an :ref:`Applicable <interfaces-applicable>`,
+The Transaction is an :ref:`Applicable <interfaces-applicable>`,
 :ref:`Marshallable <interfaces-marshallable>`, and :ref:`Hashable <interfaces-hashable>`
 object. Transactions are the units of work used to manipulate state on the blockchain.
 Transactions consist of always one ``Transform`` to mutate state and one-or-many ``Proofs`` to authenticate
 the changes proposed in the ``Transform``.
 
-To construct a ``Transaction`` it's dependencies should be constructed and injected.
-First a ``Transform`` must be constructed, each transform's constructor
-will differ based on it's behaviour. The transforms are what will essentially
+To construct a ``Transaction`` its dependencies should be constructed and injected.
+First, a ``Transform`` must be constructed, each transform's constructor
+will differ based on its behaviour. The transforms are what will essentially
 define the business logic of the application.
 
 Once the ``Transform`` has been created, at least one Proof needs to be added to
@@ -72,16 +72,16 @@ inside the Credits Framework to modify :ref:`Blockchain State <blockchain-state>
 
 When a Transaction with Transform inside is onboarded to the Node, it is verified against the current
 :ref:`Blockchain State <blockchain-state>`. The ``verify()`` method should perform
-checks against state to check if this Transform will be applicable either now or sometime in the
-future. If a Transform fails verification at any point it will be flushed from
-the Node. Note that if a Transform attempts to modify state during its validation,
-changes made to state will be disposed of.
+checks against the state to check if this Transform will be applicable either
+now or sometime in the future. If a Transform fails verification at any point it
+will be flushed from the Node. Note that if a Transform attempts to modify state
+during its validation, changes made to the state will be disposed of.
 
 When a Transform is applied it will be given the current state of the Network
 and expected to modify and return a new state. During the
-:ref:`transaction application<blockchain-applying-transactions>` a Transform may perform
+:ref:`transaction application<blockchain-applying-transactions>`, a Transform may perform
 any verification that has to be performed "upon application". If this verification fails,
-the apply should fail and return an erroneous result. However failure of ``apply`` doesn't
+the apply should fail and return an erroneous result. However, failure of ``apply`` doesn't
 cause the transaction to be discarded. It stays in the unconfirmed pool until it's
 either gets confirmed or it's ``verify`` method also fails. Only when ``verify`` fails
 transaction is discarded and forgotten.
@@ -90,7 +90,7 @@ transaction is discarded and forgotten.
 Hash storage transform
 ----------------------
 
-Hash storage usecase is probably the simplest one possible on the blockchain.
+Hash storage use case is probably the simplest one possible on the blockchain.
 In this case following transform can be used:
 
 .. code-block:: python
@@ -113,7 +113,7 @@ In this case following transform can be used:
 
 
 This transform will first verify the hash is not already loaded. If it is loaded
-then it fails. When it comes to application then it simply sets the hash against
+then it fails. When it comes to the application then it simply sets the hash against
 the time it was applied to the state of the world. Taking this idea a more
 complex KYC or logging system could easily be developed.
 
@@ -195,25 +195,28 @@ for transferring basic token balances between accounts.
         def hash(self, hash_provider):
             return hash_provider.hexdigest(stringify.stringify(self.marshall()))
 
+You can find this example in balance_transform.py_.
+
+.. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
 In this example ``verify`` method references to *now or in future*, this is because of the way
 the ``verify`` and ``apply`` logic is working in conjunction with the unconfirmed transactions
 pool. The ``verify`` is called against current global state once the transaction
 is trying to be onboarded, and if it passes (i.e. doesn't return an error) - the transaction
-is onboarded into node's unconfirmed transaction pool. However at this point the ``apply``
-is not yet invoked. Once the node will attempt to put transaction into a block it will call
+is onboarded into node's unconfirmed transaction pool. However at this point, the ``apply``
+is not yet invoked. Once the node will attempt to put the transaction into a block it will call
 the transform's ``apply`` method, and that method may have it's own additional verification logic.
-For example the simplest case can be the proof's nonce check. In the transaction's ``verify``
+For example, the simplest case can be the proof's nonce check. In the transaction's ``verify``
 method the nonce expected to be equal or greater than the current nonce recorded in the global state.
 That mean the nonce can be just next one in line, or far greater than the one in global state.
 
-However the ``apply`` logic by default requires transaction nonce to be exactly equal to global state,
-so the transaction with nonce far off will fail to apply. In this situation the
+However, the ``apply`` logic by default requires transaction nonce to be exactly equal to global state,
+so the transaction with nonce far off will fail to apply. In this situation, the
 transaction that will successfully ``verify`` but will fail to ``apply`` will hang
 in the unconfirmed transactions pool until the time for it will come, or until
-``verify`` itself will fail and transaction will be discarded.
+``verify`` itself will fail and the transaction will be discarded.
 
-Understanding this nuanced mechanics allows to create customised behaviours with
+Understanding this nuanced mechanics allows creating customised behaviours with
 complex future dependencies and delayed execution.
 
 .. _proof:
@@ -221,9 +224,9 @@ complex future dependencies and delayed execution.
 Proof
 ^^^^^
 
-Proof is an :ref:`Applicable <interfaces-applicable>` object requiring both ``verify`` and
+The Proof is an :ref:`Applicable <interfaces-applicable>` object requiring both ``verify`` and
 ``apply`` methods implemented. Proofs are constructed with some sort of resolvable
-address, a nonce (which is typically an auto incrementing number), and a
+address, a nonce (which is typically an autoincrementing number), and a
 challenge to sign. This challenge will typically be the hash of a Transform.
 
 Once constructed a Proof is *unsigned* and a ``sign`` method must be called
@@ -232,7 +235,7 @@ signed a Proof is now considered valid as during it's ``verify`` call it will
 attempt to convert the ``verifying_key`` into an address. This address will be
 compared to the address the Proof was constructed with.
 
-When Proofs are onboarded to the Node as a part of Transasction, they are verified
+When Proofs are onboarded to the Node as a part of Transaction, they are verified
 against State to check that a Signature exists as well as any proof specific
 ordering is valid. If a Proof is onboarded in an unsigned state it's parent
 Transaction will be discarded.

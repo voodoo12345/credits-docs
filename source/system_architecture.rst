@@ -43,12 +43,12 @@ interacts with the blockchain on one side and with the user on the other.
 
 The client is expected to be able to generate and store user's private keys, create
 transactions, provide proofs and upload signed transactions to the blockchain via HTTP API.
-Also it should be able to interact with end user, however design on this side is beyond the
+Also, it should be able to interact with end user, however, design on this side is beyond the
 scope of Credits blockchain development.
 
 For all the cryptographic and blockchain primitives implementation and for reference interfaces
-we advise to use open source Python :ref:`common libary <common-library>` provided by Credits.
-However it's totally possible to create separate implementation in another language as long as
+we advise to use open source Python :ref:`common library <common-library>` provided by Credits.
+However, it's totally possible to create a separate implementation in another language as long as
 the interfaces are conformed.
 
 
@@ -67,18 +67,18 @@ Deployments
 You may deploy your private blockchain in the Credits PaaS cloud system, within your
 own infrastructure or as a mixture of both. PaaS deployments are the simplest way and
 are most suitable for early stage development and simpler deployments that do not need
-tight control over the infastructure. Own infrastructure deployments are suitable for
+tight control over the infrastructure. Own infrastructure deployments are suitable for
 higher profile production systems where full ownership of the system is required.
 
-Also own infrastructure deployments are required if you're looking to develop a more
-customized system on our framework that goes beyond of what is possible within just
+Also, own infrastructure deployments are required if you're looking to develop a more
+customised system on our framework that goes beyond of what is possible within just
 Transactions definitions. E.g. if you need to redefine the consensus mechanics or
 introduce own network transport protocols.
 
 A hybrid deployment where parts of the blockchain system are deployed on-premises
 at own infrastructure, while other parts are hosted at Credits PaaS cloud might be
-useful in case of multiparty setup, where both node control and cost
-effectiveness are critical.
+useful in case of multiparty setup, where both node control and cost-effectiveness
+are critical.
 
 Ownerships
 ----------
@@ -88,12 +88,13 @@ And of course since Credits blockchain is only meant to be used in the permissio
 environment - we assume all parties having access to blockchain are explicitly allowed
 to do so and no new parties can join the network without prior permission.
 
-In case of single ownership all of the nodes in the network are controlled by single
-party, and no other parties are expected. This is the simplest use case, and while
-it doesn't utilise some of the key blockchain benefits like external audit, it may still
-be a practical use case for the sake of immutability or record of history.
+In the case of single ownership, all of the nodes in the network are controlled by
+the single party, and no other parties are expected. This is the simplest use
+case, and while it doesn't utilise some of the key blockchain benefits like
+external audit, it may still be a practical use case for the sake of immutability
+or record of history.
 
-Multiple ownership system is a preferred blockchain usecase, as it allows to utilise
+Multiple ownership system is a preferred blockchain use case, as it allows to utilise
 external auditability features and establish trust between the parties.
 
 Multiple ownership systems may be formed of equal or roughly equal parties, where
@@ -107,7 +108,7 @@ Architecture scenarios
 
 Below we'll cover a few common scenarios practical for different use cases.
 
-Cloud based single owner blockchain
+Cloud-based single owner blockchain
 -----------------------------------
 
 Simplest scenario is when the blockchain is hosted on the Credits' public PaaS.
@@ -152,7 +153,7 @@ in Python. It will take care of all needed cryptography for you and will only re
 define needed business logic.
 
 This architecture will suit the simpler case where you require the immutability
-of the blockchain and the history trail, but do not need a crossverification
+of the blockchain and the history trail, but do not need a cross verification
 of the data between multiple parties. Client access may be given to other allowed
 parties beyond the blockchain owner himself.
 
@@ -195,10 +196,10 @@ control their own nodes, however still having the nodes being hosted in the clou
          |    +------------+|                       |    +------------+|
          +------------------+                       +------------------+
 
-In this scenario two parties (Alice and Bob) own equal parts of the blockchain
+In this scenario, two parties (Alice and Bob) own equal parts of the blockchain
 and each has a client that connects to their own parts of the system. The
 client apps for Alice and Bob may be identical, i.e. two deployments of the
-same app, or completely different apps developed separately. The only requirement
+same app or completely different apps developed separately. The only requirement
 is that these two apps have to be compatible in the blockchain client
 implementation.
 
@@ -238,14 +239,14 @@ controlling party holding authority over the additions to it.
          |    +------------+|               |    +------------+|    |    +------------+|
          +------------------+               +------------------+    +------------------+
 
-In this scenario Alice has three nodes deployed with Credits PaaS, while Bob
-and Carol have one node each deployed at their premises. Bob and Carol have same
-access to blockchain as Alice, however because they together have two nodes,
+In this scenario, Alice has three nodes deployed with Credits PaaS, while Bob
+and Carol have one node each deployed at their premises. Bob and Carol have the same
+access to blockchain as Alice, however, because they together have two nodes,
 while Alice has three - Alice nodes will always win the block voting process,
 so Bob and Carol effectively have no say over the writing to the blockchain,
 but can utilise it contents and verify it's validity.
 
-Practically there is no need to control voting via pure number of nodes, concensus
+Practically there is no need to control voting via the pure number of nodes, consensus
 mechanics allows customised voting weight distributions that would result in the
 same behaviour without a need to host an overwhelming amount of physical blockchain
 nodes.

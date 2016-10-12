@@ -8,7 +8,7 @@ To create a custom permissioned blockchain with Credits framework you will
 need to go through these steps:
 
  - create required transforms, proofs and transactions
- - test and verify validity of the code in your local dev environment
+ - test and verify the validity of the code in your local dev environment
  - start your private blockchain network and upload the code
  - create your client application using the same transactions
  - hook your client to the network via node API and start transacting on the blockchain
@@ -19,13 +19,13 @@ need to go through these steps:
 Create transforms and other modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the simplest scenario you will need to only implement your transforms. You
+In the simplest scenario, you will need to only implement your transforms. You
 can use ``SingleKeyProof`` provided in the Common library as a default way to
 prove transaction validity with one signing key per signature. And your
 transaction in the simplest scenario can also be the default ``Transaction``
 provided in the common library.
 
-In simplest case you may have just one transform. The transform must implement
+So in this simplest case, you may have just one transform. The transform must implement
 ``credits.transform.Transform``. You can find more details on implementing
 transforms and actual examples in :ref:`Transform <transform>` documentation.
 
@@ -85,9 +85,9 @@ Note that ``check_transform`` is not a substitute for standard Unit Testing,
 you should also perform standard unit testing of your Transform's ``verify()``
 and ``apply()`` methods to check that all potential outcomes are covered.
 
-You can find a full example of Transform creation and testing in checktransform.py_.
+You can find a full example of Transform creation and testing in check_transform.py_.
 
-.. _checktransform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/checktransform.py
+.. _check_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/check_transform.py
 
 
 .. _step-by-step-get-network-upload:
@@ -97,7 +97,7 @@ Get a blockchain network and upload your code
 
 Once your modules are written and tested locally - it's time to deploy a test
 blockchain network and see it in action. The easiest way to do this is to use
-our public PaaS, which is at the moment avaialable for free. You can register
+our public PaaS, which is at the moment available for free. You can register
 via the REST API and get a running network in few HTTP requests.
 
 If you're working for a government agency and looking to use our GCloud PaaS API - the process is
@@ -105,10 +105,10 @@ essentially same, except that your PaaS account will be disabled by default unti
 through the formal onboarding process.
 
 The most complicated option would be to get Credits framework running on your own infrastructure.
-This is technically possible and not that complex, since we ship it in handy prebuilt Docker containers,
+This is technically possible and not that complex since we ship it in handy prebuilt Docker containers,
 but since at the moment Credits Core is a proprietary software - you will have to go through sales channel
-first and purchase license before we'll be able to hand the software to you.
-Also the PaaS registration and network bootstrap guide will not apply in this case.
+first and purchase a license before we'll be able to hand the software to you.
+Also, the PaaS registration and network bootstrap guide will not apply in this case.
 
 Below are the API call steps needed to register with public PaaS and create 
 a test blockchain network.
@@ -148,7 +148,7 @@ Patch token
 
 After creating the organisation you need to patch your token with rights
 definitions to be able to access it. By default you would probably want to
-add all permissions at once, however in more complex access cases you may
+add all permissions at once, however, in more complex access cases you may
 have different tokens with specific access rights configured on each.
 See full permissions list in the :ref:`Paas API<paas-api>`.
 
@@ -162,9 +162,10 @@ Create network
 
 Assuming you have already developed and tested locally your transforms
 you can now provide it to bootstrap your blockchain. Please notice that module
-inclusion is a path to local file. You need to supply the module contents unescaped
-and fully intact including the linebreaks to preserve validity of the Python source,
-so it's not possible to include it's contents directly into the ``curl`` call string.
+inclusion is a path to a local file. You need to supply the module contents unescaped
+and fully intact including the line breaks to preserve the validity of the
+Python source, so it's not possible to include it's contents directly into
+the ``curl`` call string.
 
 .. code-block:: bash
 
@@ -207,11 +208,11 @@ Once your network is up and running - you can create the client side application
 for it. Essentially you will need to use the same modules that were uploaded to
 the network, but incorporate it into the client side application.
 
-Of course the bulk of your clientside application is something we cannot
+Of course, the bulk of your clientside application is something we cannot
 define, it may be a web system, a mobile app, an IoT device etc.
-However the general requirements will be that it has to be able to
+However, the general requirements will be that it has to be able to
 persistently store client's keys, and will conform to the
-Transforms and Proofs interaces uploaded into the blockchain.
+Transforms and Proofs interfaces uploaded into the blockchain.
 
 As an example here is the simple Python script that implements
 generating user's keys, dumping those to disk (persistence), creating valid
@@ -220,12 +221,49 @@ Transaction and sending it to the node's URL provided.
 
 .. code-block:: python
     :linenos:  
-    print("hi")
+
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+    import requests
+    from credits.key import ED25519SigningKey
+    from credits.address import CreditsAddressProvider
+    from credits.proof import SingleKeyProof
+    from credits.transaction import Transaction
+
+    # create a key for Alice using default key provider
+    alice_key = ED25519SigningKey.new()
+
+    # create Alice's address using default address provider
+    alice_address = CreditsAddressProvider(alice_key.to_string()).get_address()
+
+    # Saving the key to disk by marshalling it
+    with open("alice_key.json", "w") as out:
+        out.write(alice_key.marshall()
+
+    # Loading it would be also simple when you'll need it
+    # with open("alice_key.json") as keyfile:
+    #    payload = json.load(keyfile)
+    #    alice_key = ED25519SigningKey.unmarshall(None, payload)
+
+    # create transform to send credits from Alice to Bob
+    transform = BalanceTransform(amount=100, addr_from=alice_address, addr_to="bob_address")
+
+    # sign the needed proof with Alice' key
+    proof = SingleKeyProof(alice_address, 1, transform.get_challenge()).sign(alice_key)
+
+    # form a transaction
+    transaction = Transaction(transform, {alice_address: proof})
+
+    # POST your transaction to the node in your network
+    requests.post("https://public.credits.works/api/v1/node/<your_node_name>/api/v1/transaction", 
+        headers={"Authorization": "<your_api_key>"},        
+        data={"transaction": json.dumps(transaction.marshall())}
+    )
 
 
-You can also find this example in the blockchain_client.py_.
+You can also find this example in the sample_client.py_.
 
-.. _blockchain_client.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/blockchain_client.py
+.. _sample_client.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/sample_client.py
 
 
 .. _step-by-step-connect-and-start:
@@ -234,7 +272,7 @@ Connect client application to the blockchain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once the application is written and deployed you can start transacting
-on the blockchain. If everything is done correcly before - nothing blockchain
-specific is needed at this step.
+on the blockchain. If everything is done correctly in the previous steps
+- nothing blockchain specific is needed at this level.
 
 
