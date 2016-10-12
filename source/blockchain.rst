@@ -37,7 +37,7 @@ state is a string. An example of a traditional state as shown:
 In the example above there is a ``balances`` state and a ``loans`` state, these states
 can have many arbitrary number of key value pairs. Usually credits addresses are used
 as the key in a state but this doesn't always need to be the case. State is ordered
-by insertion order and is hashed to establish <what?>.
+by insertion order and is hashed to provide a state hash.
 
 
 .. _blockchain-block:

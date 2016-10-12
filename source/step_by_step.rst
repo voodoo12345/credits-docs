@@ -213,11 +213,15 @@ However the general requirements will be that it has to be able to
 persistently store client's keys, and will conform to the
 Transforms and Proofs interaces uploaded into the blockchain.
 
-As an example here is the simple CLI Python script that implements
+As an example here is the simple Python script that implements
 generating user's keys, dumping those to disk (persistence), creating valid
 Transaction and sending it to the node's URL provided.
 
-<example of the test CLI application here and in the examples/ folder>
+
+.. code-block:: python
+    :linenos:  
+    print("hi")
+
 
 You can also find this example in the blockchain_client.py_.
 
