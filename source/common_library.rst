@@ -2,10 +2,10 @@
 
 
 Common library
-====
+==============
 
 Install
-^^^^
+^^^^^^^
 
 Common library is available through PyPI as ``credits.common``. To install it run:
 
@@ -15,7 +15,7 @@ Common library is available through PyPI as ``credits.common``. To install it ru
 
 
 Purpose
-^^^^
+^^^^^^^
 
 Having installed that you will be able to import required parts of the framework,
 build transactions locally, run tests against your code and interact with the remote
