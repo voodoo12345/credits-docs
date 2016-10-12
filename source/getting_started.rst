@@ -22,7 +22,7 @@ G-Cloud platform onboarding
 
 In order to sign-up for our G-Cloud offering, you will need to go through our
 :ref:`onboarding process <gcloud-onboarding-process>`, including verifying your
-organization as a qualified UK government agency.
+organisation as a qualified UK government agency.
 
 
 How to interact with the system
