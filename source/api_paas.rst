@@ -4,4 +4,4 @@ PaaS API
 ========
 
 .. raw:: html
-   :file: static/api.html
+   :file: static/api-paas.html

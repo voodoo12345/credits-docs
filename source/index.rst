@@ -18,7 +18,8 @@ Contents
    system_architecture
    step_by_step
    common_library
-   api
+   api_paas
+   api_node
    blockchain
    transactions
    interfaces
