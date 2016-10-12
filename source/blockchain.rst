@@ -54,6 +54,19 @@ referencing the state, a node can take the block, check that it is starting in t
 place as the creator of the block and then apply the transactions.
 
 
+.. _blockchain-onboarding-transactions:
+
+Onboarding transactions
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Onboarding transaction, transform or proof means generally to get it accepted into the
+node's unconfirmed transactions pool. In case of PaaS deployment the onboarding happens
+by sending the marshalled transaction to the node HTTP API. In other more complex
+deployments the HTTP API gateway can be replaced with other transport, e.g. TCP socket,
+CLI interface, RPC interface etc. Onboarding here serves as a transport agnostic term
+for act of accepting transaction into the node.
+
+
 .. _blockchain-applying-transactions:
 
 Applying transactions

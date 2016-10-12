@@ -70,7 +70,7 @@ object. Transforms are constructed with all necessary values required to modify
 state during the ``apply()`` method call and are used as a standard unit of work
 inside the Credits Framework to modify :ref:`Blockchain State <blockchain-state>`.
 
-When a Transaction with Transform inside is sent to the Node, it is verified against the current
+When a Transaction with Transform inside is onboarded to the Node, it is verified against the current
 :ref:`Blockchain State <blockchain-state>`. The ``verify()`` method should perform
 checks against state to check if this Transform will be applicable either now or sometime in the
 future. If a Transform fails verification at any point it will be flushed from
@@ -81,112 +81,17 @@ When a Transform is applied it will be given the current state of the Network
 and expected to modify and return a new state. During the
 :ref:`transaction application<blockchain-applying-transactions>` a Transform may perform
 any verification that has to be performed "upon application". If this verification fails,
-the apply should fail and return an erroneous result.
-
-Balance Transfer use case
--------------------------
-
-Note: This is not a *complete* Transform example, it has been reduced to show
-*just* the verify and apply logic. If you need a working example you should
-import ``credits.transform.BalanceTransform`` and use that.
-
-.. code-block:: python
-   :linenos:
-
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-    from credits.transform import Transform
+the apply should fail and return an erroneous result. However failure of ``apply`` doesn't
+cause the transaction to be discarded. It stays in the unconfirmed pool until it's
+either gets confirmed or it's ``verify`` method also fails. Only when ``verify`` fails
+transaction is discarded and forgotten.
 
 
-    class BalanceTransform(Transform):
-        STATE_BALANCE = "core.credits.balance_app.Balances"
+Hash storage transform
+----------------------
 
-        def __init__(self, from_address, to_address, amount):
-            self.from_address = from_address
-            self.to_address = to_address
-            self.amount = amount
-
-        def verify(self, state):
-            """
-            Verify it is possible, to apply either now or in the future. Return an
-            errornous response if verification fails.
-            """
-            balances = state[self.STATE_BALANCES]
-
-            if self.from_address not in balances:
-                return None, "from_address {} not found in {}.".format(
-                    self.from_address,
-                    self.STATE_BALANCE
-                )
-
-            if self.to_address not in balances:
-                return None, "to_address {} not found in {}.".format(
-                    self.to_address,
-                    self.STATE_BALANCE
-                )
-
-            if self.amount <= 0:
-                return None, "amount must be greater than 0."
-
-            if balances[self.from_address] < self.amount:
-                return None, (
-                    "from_address {} does not have the nessasary "
-                    "balance (current: {}, required {}) to perform transfer."
-                ).format(self.from_address, balances[self.from_address], self.amount)
-
-            return None, None  # Nothing to return, but no error.
-
-        def apply(self, state):
-            """
-            Modify state, if this fails return an errornous result. Theoretially
-            apply should never fail is verify passes.
-            """
-            balances = state[self.BALANCES]
-
-            try:
-                # If the to_address doesn't exist, create it.
-                balances[self.to_address] = balances.get(self.to_address, 0) + self.amount
-                balances[self.from_address] -= self.amount
-                return state, None
-
-            except Exception as e:
-                return None, e.message
-
-    ALICE = "1iKEfPKRCXtR5GNGZCi98RuV9ydZuiiYG"
-    BOB = "1Jozg7hkLBrjHdf5XECLMipDuYN4bNDxUV"
-
-    STATE = {
-        "core.credits.balance_app.Balances": {
-            ALICE: 1000,
-            BOB: 0,
-        }
-    }
-
-    TR = BalanceTransform(
-        from_address=ALICE,
-        to_address=BOB,
-        amount=50,
-    )
-
-    # Verify TR against the current state.
-    # Note that we do nothing with the result as TR.verify() shouldn't return anything.
-    result, error = TR.verify(STATE)
-    if error is not None:
-        raise Exception(error)  # Handle error
-
-    result, error = TR.apply(STATE)
-    if error is not None:
-        raise Exception(error)  # Handle error
-
-    STATE = result  # result is the STATE with TR applied.
-
-
-Data storage use case
----------------------
-
-Balance transfer is not the only or the simplest use case, the simplest is probably
-the usecase to store events, hashes or metadata on the blockchain. In this case a
-following transform can be used:
+Hash storage usecase is probably the simplest one possible on the blockchain.
+In this case following transform can be used:
 
 .. code-block:: python
    :linenos:
@@ -209,10 +114,107 @@ following transform can be used:
 
 This transform will first verify the hash is not already loaded. If it is loaded
 then it fails. When it comes to application then it simply sets the hash against
-the time it was applied to the state of the world. This is a far simpler usecase
-as there is less input and less validation, but taking this idea a more complex KYC or logging
-system could easily be developed.
+the time it was applied to the state of the world. Taking this idea a more
+complex KYC or logging system could easily be developed.
 
+
+Balance transfer transform
+--------------------------
+
+Here is an example implementation of a simple balance transfer transform. It
+implements ``credits.transform.Transform`` interface and required sanity checks
+for transferring basic token balances between accounts.
+
+.. code-block:: python
+   :linenos:
+
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+    from credits import transform
+    from credits import stringify
+    from credits import test
+
+    """
+    In this example we create a basic "Balance Transfer" transform. We then use
+    the credits.test.check_transform() to validate that all expected
+    attributes/methods/behaviours are provided.
+    """
+
+    class BalanceTransform(transform.Transform):
+        fqdn = "credits.test.BalanceTransform"
+
+        def __init__(self, addr_from, addr_to, amount):
+            self.addr_from = addr_from
+            self.addr_to = addr_to
+            self.amount = amount
+
+        def marshall(self):
+            return {
+                "fqdn": self.fqdn,
+                "addr_to": self.addr_to,
+                "addr_from": self.addr_from,
+                "amount": self.amount,
+            }
+
+        @classmethod
+        def unmarshall(cls, registry, payload):
+            return cls(
+                addr_from=payload["addr_from"],
+                addr_to=payload["addr_to"],
+                amount=payload["amount"],
+            )
+
+        def verify(self, state):
+            """
+            Verify it is possible, to apply either now or in future. Return an
+            errornous response if verification fals.
+            """
+            balances = state["credits.test.Balances"]
+
+            if self.addr_from not in balances:
+                return None, "%s not in credits.test.Balances."
+
+            if self.amount <= 0:
+                return None, "amount must be greater than 0."
+
+            if balances[self.addr_from] < self.amount:
+                return None, "%s does not have balance to make transfer."
+
+            return None, None  # valid transaction
+
+        def apply(self, state):
+            try:
+                balances = state["credits.test.Balances"]
+                balances[self.addr_from] -= self.amount
+                balances[self.addr_to] = balances.get(self.addr_to, 0) + self.amount  # addr_to might not exist.
+                return state, None  # return the new state.
+
+            except Exception as e:
+                return None, e.args[0]  # Something went really wrong, don't apply.
+
+        def hash(self, hash_provider):
+            return hash_provider.hexdigest(stringify.stringify(self.marshall()))
+
+
+In this example ``verify`` method references to *now or in future*, this is because of the way
+the ``verify`` and ``apply`` logic is working in conjunction with the unconfirmed transactions
+pool. The ``verify`` is called against current global state once the transaction
+is trying to be onboarded, and if it passes (i.e. doesn't return an error) - the transaction
+is onboarded into node's unconfirmed transaction pool. However at this point the ``apply``
+is not yet invoked. Once the node will attempt to put transaction into a block it will call
+the transform's ``apply`` method, and that method may have it's own additional verification logic.
+For example the simplest case can be the proof's nonce check. In the transaction's ``verify``
+method the nonce expected to be equal or greater than the current nonce recorded in the global state.
+That mean the nonce can be just next one in line, or far greater than the one in global state.
+
+However the ``apply`` logic by default requires transaction nonce to be exactly equal to global state,
+so the transaction with nonce far off will fail to apply. In this situation the
+transaction that will successfully ``verify`` but will fail to ``apply`` will hang
+in the unconfirmed transactions pool until the time for it will come, or until
+``verify`` itself will fail and transaction will be discarded.
+
+Understanding this nuanced mechanics allows to create customised behaviours with
+complex future dependencies and delayed execution.
 
 .. _proof:
 
@@ -230,7 +232,7 @@ signed a Proof is now considered valid as during it's ``verify`` call it will
 attempt to convert the ``verifying_key`` into an address. This address will be
 compared to the address the Proof was constructed with.
 
-When Proofs are sent to the Node as a part of Transasction, they are verified
+When Proofs are onboarded to the Node as a part of Transasction, they are verified
 against State to check that a Signature exists as well as any proof specific
 ordering is valid. If a Proof is onboarded in an unsigned state it's parent
 Transaction will be discarded.

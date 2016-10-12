@@ -4,40 +4,101 @@ Step by step guide
 ==================
 
 
-To create a custom permissioned Credits blockchain you will need to go through these steps:
+To create a custom permissioned blockchain with Credits framework you will
+need to go through these steps:
 
  - create required transforms, proofs and transactions
  - test and verify validity of the code in your local dev environment
- - start your personal blockchain network
- - upload the code to your network and put it into execution
+ - start your private blockchain network and upload the code
  - create your client application using the same transactions
  - hook your client to the network via node API and start transacting on the blockchain
 
 
-Create transforms and other source
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. _step-by-step-create-transform:
 
-Your transforms should implement ``credits.transform.Transform``, see the
-:ref:`Transform <transform>` documentation for specifics.
+Create transforms and other modules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the simplest scenario you will need to only implement your transforms. You
+can use ``SingleKeyProof`` provided in the Common library as a default way to
+prove transaction validity with one signing key per signature. And your
+transaction in the simplest scenario can also be the default ``Transaction``
+provided in the common library.
+
+In simplest case you may have just one transform. The transform must implement
+``credits.transform.Transform``. You can find more details on implementing
+transforms and actual examples in :ref:`Transform <transform>` documentation.
+
+
+.. _step-by-step-test-verify:
 
 Test and verify your transforms locally
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To test your applications, you can use some helper functions located in ``credits.test``. To test Transforms you can use
-``credits.test.check_transform()``. ``check_transform()`` will run a collection of tests against your transform to both
-verify it has explicitly met the requirements of ``credits.transform.Transform`` and that all functions execute as 
-expected. To see a working example of how to use ``check_transform()`` see: checktransform.py_.
+Before uploading your modules to the network you might want to verify it
+locally to confirm that created code conforms to required interfaces.
 
-Note that check_transform is not a substitute for standard Unit Testing, you should also perform your own unit testing
-of your Transform's ``verify()`` and ``apply()`` functions to check that all potential outcomes are covered.
+To do this you can use helper functions located in ``credits.test``. To test
+Transforms you can use ``credits.test.check_transform()``.
+
+``check_transform()`` will run a collection of tests against your transform
+to both verify it has explicitly met the requirements of
+``credits.transform.Transform`` interface and that all functions execute as
+expected. Here is an example of how to use ``check_transform()``:
+
+.. code-block:: python
+   :linenos:
+
+    # Construct the Transform with these.
+    kwargs = {
+        "addr_from": "alice_address",
+        "addr_to": "bob_address",
+        "amount": 100,
+    }
+
+    # This is an initial state that both verify and apply will use
+    state = {
+        "credits.test.Balances": {
+            "alice_address": 1000,
+        }
+    }
+
+    # This is how state should look after the Transform has applied to it.
+    state_expected = {
+        "credits.test.Balances": {
+            "alice_address": 900,
+            "bob_address": 100,  # This key is added as a result of transform.apply()
+        }
+    }
+
+    # This call should succeed without assertion errors or exceptions
+    test.check_transform(
+        cls=BalanceTransform,
+        dependencies=[],
+        kwargs=kwargs,
+        state=state,
+        state_expected=state_expected,
+    )
+
+
+Note that ``check_transform`` is not a substitute for standard Unit Testing,
+you should also perform standard unit testing of your Transform's ``verify()``
+and ``apply()`` methods to check that all potential outcomes are covered.
+
+You can find a full example of Transform creation and testing in checktransform.py_.
 
 .. _checktransform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/checktransform.py
+
+
+.. _step-by-step-get-network-upload:
 
 Get a blockchain network and upload your code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The easiest way to do this is to use our public PaaS, which is at the moment avaialable for free.
-You can register via the REST API and get a running network in few HTTP requests.
+Once your modules are written and tested locally - it's time to deploy a test
+blockchain network and see it in action. The easiest way to do this is to use
+our public PaaS, which is at the moment avaialable for free. You can register
+via the REST API and get a running network in few HTTP requests.
 
 If you're working for a government agency and looking to use our GCloud PaaS API - the process is
 essentially same, except that your PaaS account will be disabled by default until we'll get you
@@ -49,76 +110,127 @@ but since at the moment Credits Core is a proprietary software - you will have t
 first and purchase license before we'll be able to hand the software to you.
 Also the PaaS registration and network bootstrap guide will not apply in this case.
 
-PaaS selfservice network creation steps.
+Below are the API call steps needed to register with public PaaS and create 
+a test blockchain network.
 
 Register an account
 -------------------
-::
+
+.. code-block:: bash
 
     curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" \
-        -F "attributes={}" https://gcloud.credits.works/api/v1/user
+        -F "attributes={}" https://public.credits.works/api/v1/user
 
 Create access token
 -------------------
-::
+
+.. code-block:: bash
 
     curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" \
-        -F "permissions={}" https://gcloud.credits.works/api/v1/token
+        -F "permissions={}" https://public.credits.works/api/v1/token
 
-In the result of this request you'll need the ``api_key`` field. This will be your access token for
-further requests.
+You will need to save the ``api_key`` returned the response to this request. This
+will be your access token for further requests.
 
 Create organisation
 -------------------
 
-Organisation ID returned in this response will be needed in further requests. You can retrieve it again
-through ``GET /api/v1/user`` endpoint.
-::
+Organisation ID returned in this response will be needed in further requests.
+You can save it now or retrieve again later through ``GET /api/v1/user`` endpoint.
+
+.. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" -F "name=acme-org" \
-        -F "attributes={}" https://gcloud.credits.works/api/v1/organization
+        -F "attributes={}" https://public.credits.works/api/v1/organization
 
 Patch token
 -----------
 
-After creating the organisation you need to patch your token with access to it. By default you would probably want to
-add all permissions at once, however in more complex access cases you may have different tokens with specific
-access rights configured on each.
-::
+After creating the organisation you need to patch your token with rights
+definitions to be able to access it. By default you would probably want to
+add all permissions at once, however in more complex access cases you may
+have different tokens with specific access rights configured on each.
+See full permissions list in the :ref:`Paas API<paas-api>`.
+
+.. code-block:: bash
 
     curl -X PATCH --header "Authorization: <your_token>" -F "permissions={"<org_id>":{<permissions list>}}" \
-        https://gcloud.credits.works/api/v1/token
+        https://public.credits.works/api/v1/token
 
 Create network
 --------------
 
-Assuming you have already developed and tested locally your transforms you can provide it to bootstrap your blockchain.
-Please notice that module inclusion is a path to file. You need to supply the module contents unescaped and fully
-intact including the linebreaks, so it's not possible to include it's contents directly into the ``curl`` call.
-::
+Assuming you have already developed and tested locally your transforms
+you can now provide it to bootstrap your blockchain. Please notice that module
+inclusion is a path to local file. You need to supply the module contents unescaped
+and fully intact including the linebreaks to preserve validity of the Python source,
+so it's not possible to include it's contents directly into the ``curl`` call string.
+
+.. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" -F "name=block-network" \
         -F "state=<your_genesis_state>" -F module@<path_to_your_module_file> \
-        https://gcloud.credits.works/api/v1/network
+        https://public.credits.works/api/v1/network
 
 Check node names
 ----------------
 
-Network creation takes some time, and once it's done you'll be able to retrieve node names needed in further queries.
-::
+Network creation takes some time, and once it's done you'll be able to retrieve
+node names needed in further queries.
+
+.. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" \
-        https://gcloud.credits.works/api/v1/network/<your_network_id>
+        https://public.credits.works/api/v1/network/<your_network_id>
 
 Check node status
 -----------------
 
-In the node api notice the fact that effectively we're querying the nodes directly, however these calls need to
-be proxied through the main API for access control, and thus we need to supply ``/api/v1/node/<your_node_name>`` as
-the path to the target node and then ``/api/v1/status`` as the actual method call within that node's API.
-::
+In the node api notice the fact that effectively we're querying the nodes
+directly, however these calls need to be proxied through the main API for
+access control purposes, and thus we need to supply
+``/api/v1/node/<your_node_name>`` as the path to the target node and
+then ``/api/v1/status`` as the actual method call within that node's API.
+
+.. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" \
-        https://gcloud.credits.works/api/v1/node/<your_node_name>/api/v1/status
+        https://public.credits.works/api/v1/node/<your_node_name>/api/v1/status
+
+
+.. _step-by-step-create-client:
+
+Create client application
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Once your network is up and running - you can create the client side application
+for it. Essentially you will need to use the same modules that were uploaded to
+the network, but incorporate it into the client side application.
+
+Of course the bulk of your clientside application is something we cannot
+define, it may be a web system, a mobile app, an IoT device etc.
+However the general requirements will be that it has to be able to
+persistently store client's keys, and will conform to the
+Transforms and Proofs interaces uploaded into the blockchain.
+
+As an example here is the simple CLI Python script that implements
+generating user's keys, dumping those to disk (persistence), creating valid
+Transaction and sending it to the node's URL provided.
+
+<example of the test CLI application here and in the examples/ folder>
+
+You can also find this example in the blockchain_client.py_.
+
+.. _blockchain_client.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/blockchain_client.py
+
+
+.. _step-by-step-connect-and-start:
+
+Connect client application to the blockchain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Once the application is written and deployed you can start transacting
+on the blockchain. If everything is done correcly before - nothing blockchain
+specific is needed at this step.
 
 
