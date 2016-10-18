@@ -161,17 +161,25 @@ Create network
 --------------
 
 Assuming you have already developed and tested locally your transforms
-you can now provide it to bootstrap your blockchain. Please notice that module
-inclusion is a path to a local file. You need to supply the module contents unescaped
-and fully intact including the line breaks to preserve the validity of the
-Python source, so it's not possible to include it's contents directly into
-the ``curl`` call string.
+you can now provide it to bootstrap your custom blockchain. Please notice
+that module inclusion is a path to a local file. For this parameter you need to
+supply the contents of the module created earlier at steps 1 and 2.
+The "module" is essentially a correct and complete Python source file
+with your Transforms and Proofs. An example of fully implemented BalanceTransform
+can be found in balance_transform.py_.
+
+You need to supply module source code fully intact including the line breaks
+to preserve the validity of the Python source, so it's not possible to include
+it's contents directly into the ``curl`` call string, and it has to be
+included as part of the multipart POST request.
 
 .. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" -F "name=block-network" \
         -F "state=<your_genesis_state>" -F module@<path_to_your_module_file> \
         https://public.credits.works/api/v1/network
+
+.. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
 Check node names
 ----------------
