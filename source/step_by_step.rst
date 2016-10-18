@@ -7,16 +7,16 @@ Step by step guide
 To create a custom permissioned blockchain with Credits framework you will
 need to go through these steps:
 
- - create required transforms, proofs and transactions
- - test and verify the validity of the code in your local dev environment
- - start your private blockchain network and upload the code
- - create your client application using the same transactions
- - hook your client to the network via node API and start transacting on the blockchain
+1. create required transforms, proofs and transactions
+2. test and verify the validity of the code in your local dev environment
+3. start your private blockchain network and upload the code
+4. create your client application using the same transactions
+5. hook your client to the network via node API and start transacting on the blockchain
 
 
 .. _step-by-step-create-transform:
 
-Create transforms and other modules
+1. Create transforms and other modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the simplest scenario, you will need to only implement your transforms. You
@@ -32,7 +32,7 @@ transforms and actual examples in :ref:`Transform <transform>` documentation.
 
 .. _step-by-step-test-verify:
 
-Test and verify your transforms locally
+2. Test and verify your transforms locally
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Before uploading your modules to the network you might want to verify it
@@ -92,7 +92,7 @@ You can find a full example of Transform creation and testing in check_transform
 
 .. _step-by-step-get-network-upload:
 
-Get a blockchain network and upload your code
+3. Get a blockchain network and upload your code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once your modules are written and tested locally - it's time to deploy a test
@@ -161,17 +161,25 @@ Create network
 --------------
 
 Assuming you have already developed and tested locally your transforms
-you can now provide it to bootstrap your blockchain. Please notice that module
-inclusion is a path to a local file. You need to supply the module contents unescaped
-and fully intact including the line breaks to preserve the validity of the
-Python source, so it's not possible to include it's contents directly into
-the ``curl`` call string.
+you can now provide it to bootstrap your custom blockchain. Please notice
+that module inclusion is a path to a local file. For this parameter you need to
+supply the contents of the module created earlier at steps 1 and 2.
+The "module" is essentially a correct and complete Python source file
+with your Transforms and Proofs. An example of fully implemented BalanceTransform
+can be found in balance_transform.py_.
+
+You need to supply module source code fully intact including the line breaks
+to preserve the validity of the Python source, so it's not possible to include
+it's contents directly into the ``curl`` call string, and it has to be
+included as part of the multipart POST request.
 
 .. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" -F "name=block-network" \
         -F "state=<your_genesis_state>" -F module@<path_to_your_module_file> \
         https://public.credits.works/api/v1/network
+
+.. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
 Check node names
 ----------------
@@ -201,7 +209,7 @@ then ``/api/v1/status`` as the actual method call within that node's API.
 
 .. _step-by-step-create-client:
 
-Create client application
+4. Create client application
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once your network is up and running - you can create the client side application
@@ -268,7 +276,7 @@ You can also find this example in the sample_client.py_.
 
 .. _step-by-step-connect-and-start:
 
-Connect client application to the blockchain
+5. Connect client application to the blockchain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once the application is written and deployed you can start transacting
