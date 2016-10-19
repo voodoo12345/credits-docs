@@ -173,6 +173,24 @@ to preserve the validity of the Python source, so it's not possible to include
 it's contents directly into the ``curl`` call string, and it has to be
 included as part of the multipart POST request.
 
+State can be initialized with the following format
+
+.. code-block:: javascript
+    
+    {
+        "works.credits.balances": {
+            "default": 0,
+            "values": {
+                "bob": 100,
+                "alice": 400
+            }    
+        }
+    }
+
+Default defines what is returned when you use safe access on a state and the key is not present. This can be any valid JSON value.
+Values is the initial state of the world, in the example above bob will have 100, alice will have 400 and any other key will return
+the default 0. You can define as many states via the FQDN as you want but each state must have a defined default and values.
+
 .. code-block:: bash
 
     curl -X POST --header "Authorization: <your_token>" -F "name=block-network" \
