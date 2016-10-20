@@ -23,21 +23,37 @@ state is a string. An example of a traditional state as shown:
 .. code-block:: json
 
     {
-        "loans": {
-            "Bob": 200,
-            "Dave": 200
+        "works.credits.loans": {
+            "default": 0,
+            "values": {
+                "Bob": 200,
+                "Dave": 200
+            }
         },
-        "balances": {
-            "Alice": 100,
-            "Carol": 100
+        "works.credits.balances": {
+            "default": 0,
+            "values": {
+                "Alice": 100,
+                "Carol": 100
+            }
         }
     }
 
+In the example above there is a ``works.credits.balances`` state and a
+``works.credits.loans`` state. Each state has to have an FQDN key, and
+must have defined ``default`` and ``values`` entries. You can define
+as many states as you need inside the global state.
 
-In the example above there is a ``balances`` state and a ``loans`` state, these states
-can have many arbitrary number of key value pairs. Usually credits addresses are used
-as the key in a state but this doesn't always need to be the case. The State is ordered
-by insertion order and is hashed to provide a state hash.
+Inside the state ``values`` you can have an arbitrary number of key value
+pairs. Usually credits addresses are used as the keys in a state but this
+doesn't always need to be the case, as the keys nature depends on application's
+business logic. The state is ordered by insertion order and the whole
+state is hashed to provide a state hash.
+
+The ``default`` inside the State defines what is returned when you use safe
+access on a state and the key is not present in the ``values``. Default
+can be any valid JSON value. In the example above a query on any other key
+apart from the explicitly defined ones will return the default integer 0.
 
 
 .. _blockchain-block:

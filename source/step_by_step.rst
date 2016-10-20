@@ -29,6 +29,10 @@ So in this simplest case, you may have just one transform. The transform must im
 ``credits.transform.Transform``. You can find more details on implementing
 transforms and actual examples in :ref:`Transform <transform>` documentation.
 
+You also will need to model your genesis state. Genesis state is a JSON document
+describing the initial values that will be injected at the bootstrap of the
+blockchain. You can refere to :ref:`Blockchain State <blockchain-state>` for
+details and examples.
 
 .. _step-by-step-test-verify:
 
