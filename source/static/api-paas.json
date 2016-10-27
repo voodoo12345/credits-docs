@@ -110,7 +110,7 @@
                     "token"
                 ],
                 "summary": "Update token",
-                "description": "Update this token with new permissions. The permissions field is a JSON string \niterating all permissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
+                "description": "Update this token with new permissions. The permissions field is a JSON string \niterating all permissions granted to the user with this token on certain\norganisations. Expected format: `{\"org_id\": [\"permission0\",\n\"permission1\"]}`. May be an empty dictionary (like `{}`) if no\norganisation was created yet. Possible permissions: \n - USER_READ\n - USER_WRITE\n - ORGANIZATION_READ \n - ORGANIZATION_WRITE \n - ORGANIZATION_DELETE \n - NETWORK_READ \n - NETWORK_WRITE \n - NETWORK_DELETE\n",
                 "parameters": [
                     {
                         "name": "permissions",
