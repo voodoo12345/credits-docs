@@ -189,7 +189,7 @@ node names needed in further queries.
 
 .. code-block:: bash
 
-    curl -X POST --header "Authorization: <your_token>" https://public.credits.works/api/v1/network/<your_network_id>
+    curl -X GET --header "Authorization: <your_token>" https://public.credits.works/api/v1/network/<your_network_id>
 
 Check node status
 -----------------
@@ -202,7 +202,7 @@ then ``/api/v1/status`` as the actual method call within that node's API.
 
 .. code-block:: bash
 
-    curl -X POST --header "Authorization: <your_token>" https://public.credits.works/api/v1/node/<your_node_name>/api/v1/status
+    curl -X GET --header "Authorization: <your_token>" https://public.credits.works/api/v1/node/<your_node_name>/api/v1/status
 
 
 .. _step-by-step-create-client:
