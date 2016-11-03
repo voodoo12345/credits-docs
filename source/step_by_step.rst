@@ -129,8 +129,7 @@ Create access token
 
 .. code-block:: bash
 
-    curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" \
-        -F "permissions={}" https://public.credits.works/api/v1/token
+    curl -X POST -F "email=test@example.com" -F "password=highlysecurepassword" -F "permissions={}" https://public.credits.works/api/v1/token
 
 You will need to save the ``api_key`` returned the response to this request. This
 will be your access token for further requests.
@@ -152,11 +151,13 @@ After creating the organisation you need to patch your token with rights
 definitions to be able to access it. By default you would probably want to
 add all permissions at once, however, in more complex access cases you may
 have different tokens with specific access rights configured on each.
-See full permissions list in the :ref:`Paas API<paas-api>`.
+Example below shows all possible permissions granted at once. You can
+amend it if needed. See more on permissions in the :ref:`Paas API<paas-api>`.
 
 .. code-block:: bash
 
-    curl -X PATCH --header "Authorization: <your_token>" -F "permissions={"<org_id>":{<permissions list>}}" https://public.credits.works/api/v1/token
+    curl -X PATCH --header "Authorization: <your_token>" -F "permissions={\"<org_id>\":[\"USER_READ\",\"USER_WRITE\",\"USER_DELETE\",\"ORGANIZATION_READ\",\"ORGANIZATION_WRITE\",\"ORGANIZATION_DELETE\",\"NETWORK_READ\",\"NETWORK_WRITE\",\"NETWORK_DELETE\"]}" https://public.credits.works/api/v1/token
+
 
 Create network
 --------------
@@ -176,7 +177,7 @@ included as part of the multipart POST request.
 
 .. code-block:: bash
 
-    curl -X POST --header "Authorization: <your_token>" -F "name=block-network" -F "state=<your_genesis_state>" -F module@<path_to_your_module_file> https://public.credits.works/api/v1/network
+    curl -X POST --header "Authorization: <your_token>" -F "organization_id=<org_id>" -F "name=example-network" -F "state={\"example.fqdn\":{\"default\":0,\"values\":{}}}" -F module@/path/to/your/module/file.py -F size=<network_size> https://public.credits.works/api/v1/network
 
 .. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
