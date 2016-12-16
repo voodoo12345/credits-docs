@@ -63,15 +63,21 @@ expected. Here is an example of how to use ``check_transform()``:
     # This is an initial state that both verify and apply will use
     state = {
         "credits.test.Balances": {
-            "alice_address": 1000,
+            "default": 0,
+            "values":{
+                "alice_address": 1000,
+            }
         }
     }
 
     # This is how state should look after the Transform has applied to it.
     state_expected = {
         "credits.test.Balances": {
-            "alice_address": 900,
-            "bob_address": 100,  # This key is added as a result of transform.apply()
+            "default": 0,
+            "values":{
+                "alice_address": 900,
+                "bob_address": 100,  # This key is added as a result of transform.apply()
+            }
         }
     }
 
@@ -191,6 +197,21 @@ node names needed in further queries.
 
     curl -X GET --header "Authorization: <your_token>" https://public.credits.works/api/v1/network/<your_network_id>
 
+Update network module
+---------------------
+
+If you need to update the module you've created, which is quite likely - you
+can do this by PATCHing the network.
+
+Note that you can update only the module code, but not the initial state, as
+changing genesis state would invalidate the whole blockchain. Also you cannot
+change network name or size at the moment. This stems from the way we deploy
+nodes and is a technical limitation of the current PaaS.
+
+.. code-block:: bash
+
+    curl -X PATCH --header "Authorization: <your_token>" -F module=@/path/to/your/module/file.py https://public.credits.works/api/v1/network/<your_network_id>
+
 Check node status
 -----------------
 
@@ -232,6 +253,7 @@ Transaction and sending it to the node's URL provided.
     # -*- coding: utf-8 -*-
     import requests
     from credits.key import ED25519SigningKey
+    from credits.hash import SHA256HashProvider
     from credits.address import CreditsAddressProvider
     from credits.proof import SingleKeyProof
     from credits.transaction import Transaction
@@ -240,30 +262,36 @@ Transaction and sending it to the node's URL provided.
     alice_key = ED25519SigningKey.new()
 
     # create Alice's address using default address provider
-    alice_address = CreditsAddressProvider(alice_key.to_string()).get_address()
+    alice_address = CreditsAddressProvider(alice_key.get_verifying_key().to_string()).get_address()
 
-    # Saving the key to disk by marshalling it
+    # Saving the key to disk by marshalling it out
     with open("alice_key.json", "w") as out:
-        out.write(alice_key.marshall()
+        out.write(alice_key.marshall())
 
     # Loading it would be also simple when you'll need it
     # with open("alice_key.json") as keyfile:
     #    payload = json.load(keyfile)
     #    alice_key = ED25519SigningKey.unmarshall(None, payload)
 
-    # create transform to send credits from Alice to Bob
-    transform = BalanceTransform(amount=100, addr_from=alice_address, addr_to="bob_address")
+    # Create transform to send credits from Alice to Bob.
+    # Note that here we have not created an address for Bob and are sending to string `bob_address`
+    # There is no strict requirement to send to a real address or to an address at all,
+    # depending on nature of your transforms you may send strictly to real addresses or to random aliases like this.
+    transform = BalanceTransform(addr_from=alice_address, addr_to="bob_address", amount=100)
 
     # sign the needed proof with Alice' key
-    proof = SingleKeyProof(alice_address, 1, transform.get_challenge()).sign(alice_key)
+    challenge = transform.get_challenge(SHA256HashProvider()).hex()
+    alice_nonce = 0
+    proof = SingleKeyProof(alice_address, alice_nonce, challenge).sign(alice_key)
 
     # form a transaction
     transaction = Transaction(transform, {alice_address: proof})
 
     # POST your transaction to the node in your network
-    requests.post("https://public.credits.works/api/v1/node/<your_node_name>/api/v1/transaction", 
-        headers={"Authorization": "<your_api_key>"},        
-        data={"transaction": json.dumps(transaction.marshall())}
+    requests.post(
+        "https://public.credits.works/api/v1/node/<your_node_name>/api/v1/transaction",
+        headers={"Authorization": "<your_auth_token>"},
+        data={"json": json.dumps(transaction.marshall())}
     )
 
 
@@ -280,5 +308,3 @@ You can also find this example in the sample_client.py_.
 Once the application is written and deployed you can start transacting
 on the blockchain. If everything is done correctly in the previous steps
 - nothing blockchain specific is needed at this level.
-
-

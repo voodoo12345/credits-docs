@@ -48,11 +48,12 @@ will return a list of mandatory addresses that must provide a Proof.
     
     transform = BalanceTransform(ALICE_ADDR, BOB_ADDR, 100)
     # transform.required_authorizations() ==  [ALICE_ADDR]
-    
+
+    nonce = 0
     transaction = Transaction(
         transform=transform,
         proofs=[
-            SingleKeyProof(ALICE_ADDR, 0, transform.hash(HASH_PROVIDER)).sign(ALICE),
+            SingleKeyProof(ALICE_ADDR, nonce, transform.hash(HASH_PROVIDER)).sign(ALICE),
         ]
     )
     
@@ -131,7 +132,6 @@ for transferring basic token balances between accounts.
     #!/usr/bin/env python
     # -*- coding: utf-8 -*-
     from credits import transform
-    from credits import stringify
     from credits import test
 
     """
@@ -151,8 +151,8 @@ for transferring basic token balances between accounts.
         def marshall(self):
             return {
                 "fqdn": self.fqdn,
-                "addr_to": self.addr_to,
                 "addr_from": self.addr_from,
+                "addr_to": self.addr_to,
                 "amount": self.amount,
             }
 
@@ -178,7 +178,7 @@ for transferring basic token balances between accounts.
                 return None, "amount must be greater than 0."
 
             if balances[self.addr_from] < self.amount:
-                return None, "%s does not have balance to make transfer."
+                return None, "%s does not have enough balance to make transfer."
 
             return None, None  # valid transaction
 
@@ -191,9 +191,6 @@ for transferring basic token balances between accounts.
 
             except Exception as e:
                 return None, e.args[0]  # Something went really wrong, don't apply.
-
-        def hash(self, hash_provider):
-            return hash_provider.hexdigest(stringify.stringify(self.marshall()))
 
 You can find this example in balance_transform.py_.
 
