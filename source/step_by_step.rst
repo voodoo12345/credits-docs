@@ -39,15 +39,16 @@ details and examples.
 2. Test and verify your transforms locally
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Before uploading your modules to the network you might want to verify it locally to confirm that created code conforms
-to required interfaces.
+Before uploading your modules to the network you might want to verify it
+locally to confirm that created code conforms to required interfaces.
 
-To do this you can use helper functions located in ``credits.test``. To test Transforms you can use
-``credits.test.check_transform()``.
+To do this you can use helper functions located in ``credits.test``. To test
+Transforms you can use ``credits.test.check_transform()``.
 
-``check_transform()`` will run a collection of tests against your transform to both verify it has explicitly met the
-requirements of ``credits.transform.Transform`` interface and that all functions execute as expected. Here is an example
-of how to use ``check_transform()``:
+``check_transform()`` will run a collection of tests against your transform
+to both verify it has explicitly met the requirements of
+``credits.transform.Transform`` interface and that all functions execute as
+expected. Here is an example of how to use ``check_transform()``:
 
 .. code-block:: python
    :linenos:

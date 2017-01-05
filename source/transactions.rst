@@ -8,19 +8,22 @@ Transactions, transforms, proofs
 Transaction
 ^^^^^^^^^^^
 
-The Transaction is an :ref:`Applicable <interfaces-applicable>`, :ref:`Marshallable <interfaces-marshallable>`, and
-:ref:`Hashable <interfaces-hashable>` object. Transactions are the units of work used to manipulate state on the
-blockchain.  Transactions consist of always one ``Transform`` to mutate state and one-or-many ``Proofs`` to authenticate
+The Transaction is an :ref:`Applicable <interfaces-applicable>`,
+:ref:`Marshallable <interfaces-marshallable>`, and :ref:`Hashable <interfaces-hashable>`
+object. Transactions are the units of work used to manipulate state on the blockchain.
+Transactions consist of always one ``Transform`` to mutate state and one-or-many ``Proofs`` to authenticate
 the changes proposed in the ``Transform``.
 
-To construct a ``Transaction`` its dependencies should be constructed and injected.  First, a ``Transform`` must be
-constructed, each transform's constructor will differ based on its behaviour. The transforms are what will essentially
+To construct a ``Transaction`` its dependencies should be constructed and injected.
+First, a ``Transform`` must be constructed, each transform's constructor
+will differ based on its behaviour. The transforms are what will essentially
 define the business logic of the application.
 
-Once the ``Transform`` has been created, at least one Proof needs to be added to the transaction. Use
-``Transform.hash()`` method to generate a challenge for the Proof, and ``Proof.sign(key)`` method to sign the
-transaction.  Note that a ``Transform`` has a ``required_authorizations`` method which will return a list of mandatory
-addresses that must provide a Proof.
+Once the ``Transform`` has been created, at least one Proof needs to be added to
+the transaction. Use ``Transform.hash()`` method to generate a challenge for the Proof,
+and ``Proof.sign(key)`` method to sign the transaction.
+Note that a ``Transform`` has a ``required_authorizations`` method which
+will return a list of mandatory addresses that must provide a Proof.
 
 .. code-block:: python
    :linenos:
@@ -32,27 +35,28 @@ addresses that must provide a Proof.
     from credits.key import ED25519SigningKey
     from credits.address import CreditsAddress
     from credits.hash import SHA256HashProvider
-    
+
     HASH_PROVIDER = SHA256HashProvider()
-    
+
     ALICE_SK = ED25519SigningKey.new()
     ALICE_VK = ALICE_SK.get_verifying_key()
     ALICE_ADDR = CreditsAddress(ALICE_VK.to_string()).get_address()
-    
+
     BOB_SK = ED25519SigningKey.new()
     BOB_VK = BOB_SK.get_verifying_key()
     BOB_ADDR = CreditsAddress(BOB_VK.to_string()).get_address()
-    
+
     transform = BalanceTransform(ALICE_ADDR, BOB_ADDR, 100)
     # transform.required_authorizations() ==  [ALICE_ADDR]
-    
+
+    nonce = 0
     transaction = Transaction(
         transform=transform,
         proofs=[
-            SingleKeyProof(ALICE_ADDR, 0, transform.hash(HASH_PROVIDER)).sign(ALICE),
+            SingleKeyProof(ALICE_ADDR, nonce, transform.hash(HASH_PROVIDER)).sign(ALICE),
         ]
     )
-    
+
     payload = transaction.marshall()  # This output can be jsonified and POSTed to /api/v1/transaction
 
 
@@ -61,22 +65,26 @@ addresses that must provide a Proof.
 Transform
 ^^^^^^^^^
 
-Transform is an :ref:`Applicable <interfaces-applicable>`, :ref:`Marshallable <interfaces-marshallable>` and
-:ref:`Hashable <interfaces-hashable>` object. Transforms are constructed with all necessary values required to modify
-state during the ``apply()`` method call and are used as a standard unit of work inside the Credits Framework to modify
-:ref:`Blockchain State <blockchain-state>`.
+Transform is an :ref:`Applicable <interfaces-applicable>`,
+:ref:`Marshallable <interfaces-marshallable>` and :ref:`Hashable <interfaces-hashable>`
+object. Transforms are constructed with all necessary values required to modify
+state during the ``apply()`` method call and are used as a standard unit of work
+inside the Credits Framework to modify :ref:`Blockchain State <blockchain-state>`.
 
-When a Transaction with Transform inside is onboarded to the Node, it is verified against the current :ref:`Blockchain
-State <blockchain-state>`. The ``verify()`` method should perform checks against the state to check if this Transform
-will be applicable either now or sometime in the future. If a Transform fails verification at any point it will be
-flushed from the Node. Note that if a Transform attempts to modify state during its validation, changes made to the
-state will be disposed of.
+When a Transaction with Transform inside is onboarded to the Node, it is verified against the current
+:ref:`Blockchain State <blockchain-state>`. The ``verify()`` method should perform
+checks against the state to check if this Transform will be applicable either
+now or sometime in the future. If a Transform fails verification at any point it
+will be flushed from the Node. Note that if a Transform attempts to modify state
+during its validation, changes made to the state will be disposed of.
 
-When a Transform is applied it will be given the current state of the Network and expected to modify and return a new
-state. During the :ref:`transaction application<blockchain-applying-transactions>`, a Transform may perform any
-verification that has to be performed "upon application". If this verification fails, the apply should fail and return
-an erroneous result. However, failure of ``apply`` doesn't cause the transaction to be discarded. It stays in the
-unconfirmed pool until it's either gets confirmed or it's ``verify`` method also fails. Only when ``verify`` fails
+When a Transform is applied it will be given the current state of the Network
+and expected to modify and return a new state. During the
+:ref:`transaction application<blockchain-applying-transactions>`, a Transform may perform
+any verification that has to be performed "upon application". If this verification fails,
+the apply should fail and return an erroneous result. However, failure of ``apply`` doesn't
+cause the transaction to be discarded. It stays in the unconfirmed pool until it's
+either gets confirmed or it's ``verify`` method also fails. Only when ``verify`` fails
 transaction is discarded and forgotten.
 
 
@@ -98,26 +106,27 @@ In this case following transform can be used:
         def verify(self, state):
             if state[self.LOG_STATE][self.hash]:
                 error = "hash %s already exists." % (self.hash, )
-                self.logger.error(error)
                 return None, Exception(error)
 
-            return None, None
+        return None, None
 
         def apply(self, state):
-            state[self.LOG_STATE][self.hash] = {"logged_at": datetime.utcnow().isoformat()}
+            state[self.LOG_STATE][self.hash] = {"logged_at": time.asctime()}
             return state, None
 
 
-This transform will first verify the hash is not already loaded. If it is loaded then it fails. When it comes to the
-application then it simply sets the hash against the time it was applied to the state of the world. Taking this idea a
-more complex KYC or logging system could easily be developed.
+This transform will first verify the hash is not already loaded. If it is loaded
+then it fails. When it comes to the application then it simply sets the hash against
+the time it was applied to the state of the world. Taking this idea a more
+complex KYC or logging system could easily be developed.
 
 
 Balance transfer transform
 --------------------------
 
-Here is an example implementation of a simple balance transfer transform. It implements ``credits.transform.Transform``
-interface and required sanity checks for transferring basic token balances between accounts.
+Here is an example implementation of a simple balance transfer transform. It
+implements ``credits.transform.Transform`` interface and required sanity checks
+for transferring basic token balances between accounts.
 
 .. code-block:: python
    :linenos:
@@ -125,7 +134,6 @@ interface and required sanity checks for transferring basic token balances betwe
     #!/usr/bin/env python
     # -*- coding: utf-8 -*-
     from credits import transform
-    from credits import stringify
     from credits import test
 
     """
@@ -145,8 +153,8 @@ interface and required sanity checks for transferring basic token balances betwe
         def marshall(self):
             return {
                 "fqdn": self.fqdn,
-                "addr_to": self.addr_to,
                 "addr_from": self.addr_from,
+                "addr_to": self.addr_to,
                 "amount": self.amount,
             }
 
@@ -167,19 +175,13 @@ interface and required sanity checks for transferring basic token balances betwe
 
             # Don't rely on key access, it returns default values for missing keys. Use explicit membership checks.
             if self.addr_from not in balances:
-                error = "%s not in credits.test.Balances."
-                self.logger.error(error)
-                return None, Exception(error)
+                return None, "%s not in credits.test.Balances."
 
             if self.amount <= 0:
-                error = "amount must be greater than 0."
-                self.logger.error(eror)
-                return None, Exception(error)
+                return None, "amount must be greater than 0."
 
             if balances[self.addr_from] < self.amount:
-                error = "%s does not have balance to make transfer."
-                self.logger.error(error)
-                return None, Exception(error)
+                return None, "%s does not have enough balance to make transfer."
 
             return None, None  # valid transaction
 
@@ -187,64 +189,70 @@ interface and required sanity checks for transferring basic token balances betwe
             try:
                 balances = state["credits.test.Balances"]
                 balances[self.addr_from] -= self.amount
-                balances[self.addr_to] += self.amount  # addr_to gets a default value of 0 if it doesn't exist.
+                balances[self.addr_to] = balances.get(self.addr_to, 0) + self.amount  # addr_to might not exist.
                 return state, None  # return the new state.
 
             except Exception as e:
-                return None, e  # Something went really wrong, don't apply.
-
-        def hash(self, hash_provider):
-            return hash_provider.hexdigest(stringify.stringify(self.marshall()))
+                return None, e.args[0]  # Something went really wrong, don't apply.
 
 You can find this example in balance_transform.py_.
 
 .. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
-In this example ``verify`` method references to *now or in future*, this is because of the way the ``verify`` and
-``apply`` logic is working in conjunction with the unconfirmed transactions pool. The ``verify`` is called against
-current global state once the transaction is trying to be onboarded, and if it passes (i.e. doesn't return an error) -
-the transaction is onboarded into node's unconfirmed transaction pool. However at this point, the ``apply`` is not yet
-invoked. Once the node will attempt to put the transaction into a block it will call the transform's ``apply`` method,
-and that method may have it's own additional verification logic.  For example, the simplest case can be the proof's
-nonce check. In the transaction's ``verify`` method the nonce expected to be equal or greater than the current nonce
-recorded in the global state.  That mean the nonce can be just next one in line, or far greater than the one in global
-state.
+In this example ``verify`` method references to *now or in future*, this is because of the way
+the ``verify`` and ``apply`` logic is working in conjunction with the unconfirmed transactions
+pool. The ``verify`` is called against current global state once the transaction
+is trying to be onboarded, and if it passes (i.e. doesn't return an error) - the transaction
+is onboarded into node's unconfirmed transaction pool. However at this point, the ``apply``
+is not yet invoked. Once the node will attempt to put the transaction into a block it will call
+the transform's ``apply`` method, and that method may have it's own additional verification logic.
+For example, the simplest case can be the proof's nonce check. In the transaction's ``verify``
+method the nonce expected to be equal or greater than the current nonce recorded in the global state.
+That mean the nonce can be just next one in line, or far greater than the one in global state.
 
-However, the ``apply`` logic by default requires transaction nonce to be exactly equal to global state, so the
-transaction with nonce far off will fail to apply. In this situation, the transaction that will successfully ``verify``
-but will fail to ``apply`` will hang in the unconfirmed transactions pool until the time for it will come, or until
+However, the ``apply`` logic by default requires transaction nonce to be exactly equal to global state,
+so the transaction with nonce far off will fail to apply. In this situation, the
+transaction that will successfully ``verify`` but will fail to ``apply`` will hang
+in the unconfirmed transactions pool until the time for it will come, or until
 ``verify`` itself will fail and the transaction will be discarded.
 
-Understanding these nuanced mechanics allows creating customised behaviours with complex future dependencies and delayed
-execution.
+Understanding this nuanced mechanics allows creating customised behaviours with
+complex future dependencies and delayed execution.
 
 .. _proof:
 
 Proof
 ^^^^^
 
-A Proof is an :ref:`Applicable <interfaces-applicable>`, and :ref:`Marshallable <interfaces-marshallable>` object.
-Proofs are stored within a Transasction and are constructed with an autoincrementing nonce, a resolvable address and a
-challenge to sign (typically the hash of a transform). The perpose of a Proof is to provide the cryptographic security
-and authorization that a Transform may be applied to the Blockchain.
+A Proof is an :ref:`Applicable <interfaces-applicable>`, and
+:ref:`Marshallable <interfaces-marshallable>` object. Proofs are stored within
+a Transasction and are constructed with an autoincrementing nonce, a
+resolvable address and a challenge to sign (typically the hash of a transform).
+The perpose of a Proof is to provide the cryptographic security and
+authorization that a Transform may be applied to the Blockchain.
 
-It is important to note that a Proof is a single-use construct: Every a proof is constructed in releation to an address'
-nonce. This is easily achieved by tracking the nonce of every address you generate proofs for locally within your client
-application. A Proof should only be applicable when it's address' nonce is equal to the nonce stored in state. Once
-the ``apply`` has succeeded, the nonce is incremented and the process repeats. This both provides per-address ordering
-and one-time use.
+It is important to note that a Proof is a single-use construct: every a proof
+is constructed in releation to an address' nonce. This is easily achieved by
+tracking the nonce of every address you generate proofs for locally within
+your client application. A Proof should only be applicable when it's address'
+nonce is equal to the nonce stored in state. Once the ``apply`` has succeeded,
+the nonce is incremented and the process repeats. This both provides
+per-address ordering and one-time use.
 
-Once constructed a Proof is *unsigned* and it's ``sign`` method must be called with a ``signing_key`` to generate a
-``verifying_key`` and ``signature``. Once signed a Proof is now considered valid as during it's ``verify`` call it will
-attempt to convert the ``verifying_key`` into an address. This address will be compared to the address the Proof was
-constructed with.
+Once constructed a Proof is *unsigned* and it's ``sign`` method must be called
+with a ``signing_key`` to generate a ``verifying_key`` and ``signature``. Once
+signed a Proof is now considered valid as during it's ``verify`` call it will
+attempt to convert the ``verifying_key`` into an address. This address will be
+compared to the address the Proof was constructed with.
 
-When Proofs are onboarded to the Node as a part of Transaction, they are verified against State to check that a
-Signature exists as well as any proof specific ordering is valid. If a Proof is onboarded in an unsigned state it's
-parent Transaction will be discarded.
+When Proofs are onboarded to the Node as a part of Transaction, they are verified
+against State to check that a Signature exists as well as any proof specific
+ordering is valid. If a Proof is onboarded in an unsigned state it's parent
+Transaction will be discarded.
 
-Note: This is not a *complete* Proof example, it has been reduced to show *just* the verify, apply, and sign logic. If
-you need a working example you should import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
+Note: This is not a *complete* Proof example, it has been reduced to show
+*just* the verify, apply, and sign logic. If you need a working example you should
+import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
 
 .. code-block:: python
    :linenos:
@@ -279,7 +287,6 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
             """
             if (self.signature is None) or (self.verifying_key is None):
                 error = "Proof has not been signed."
-                self.logger.error(error)
                 return None, Exception(error)
 
             # Generate an address for this verifying_key, we'll need to validate
@@ -289,12 +296,10 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
 
             if address != self.address:
                 error = "Proof for address {} was signed with {}".format(self.address, address)
-                self.logger.error(error)
                 return None, Exception(error)
 
             if not self.verifying_key.verify(self.challenge, self.signature):
                 error = "SingleKeyProof failed a signature check against {}".format(address)
-                self.logger.error(error)
                 return None, Exception(error)
 
             known_nonce = nonces[address]
@@ -304,7 +309,6 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
                     known_nonce,
                     address
                 )
-                self.logger.error(error)
                 return None, Exception(error)
 
             return state, None
@@ -323,7 +327,6 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
                     nonces[address],
                     address
                 )
-                self.logger.error(error)
                 return None, Exception(error)
 
             nonces[address] += 1
@@ -337,7 +340,6 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
             :type signing_key: credits.key.SigningKey
             :rtype: credits.proof.SingleKeyProof
             """
-            # Generate a VK and Signature, return a new instance of `self`
             verifying_key = signing_key.get_verifying_key()
             signature = signing_key.sign(self.challenge)
 
@@ -345,7 +347,7 @@ you need a working example you should import ``credits.proof.SingleKeyProof`` fr
                 address=self.address,
                 nonce=self.nonce,
                 challenge=self.challenge,
-                verifying_key=verifying_key,  # signed!
-                signature=signature,  # signed!
+                verifying_key=verifying_key,
+                signature=signature,
             )
 
