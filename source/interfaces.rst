@@ -26,9 +26,9 @@ unmarshalling process to locate an associated Class to instanciate.
 
     class Foo:
         fqdn = "fully.qualified.domain.name.Foo"
-    
+
     # OR
-    
+
     class Bar:
         @property
         def fqdn(self):
@@ -70,7 +70,7 @@ all subcomponents to fully resolve the object.
     def unmarshall(cls, registry: Registry, payload: dict) -> cls:
         # Note that registry.unmarshall will call cls.unmarshall on the class that
         # resolves to the subcomponent's fqdn.
-    
+
         return cls(
             variable=payload["variable"],
             subcomponent=registry.unmarshall(payload["subcomponent"]),
@@ -93,6 +93,11 @@ capable of manipulating state either immediately or in the future. If
 verification fails it should return a failed result with a reason why
 verification failed.
 
+NOTE: States have default values that are returned when non-existant keys
+are requested. When checking for a key's membership, you should use explicit
+membership checking via ``in`` and ``not in``. All other approaches are
+considered unsafe.
+
 .. code-block:: python
    :linenos:
 
@@ -101,7 +106,7 @@ verification failed.
             # self.from_address does not exist in 'foo.bar', in this example we
             # consider this a failure to verify and return a suitable message.
             return None, "from_addresss %s does not exist in 'foo.bar'" % self.from_address
-    
+
         return None, None  # Nothing to return, but no error.
 
 apply
@@ -118,7 +123,7 @@ error, return an erroneous Result.
             state["foo.bar"][self.from_address] -= self.amount
             state["foo.bar"][self.to_address] += self.amount
             return state, None
-    
+
         except Exception as e:
             return None, e.message
 
@@ -147,7 +152,7 @@ implementor has been signed.
     def sign(self, signing_key: SigningKey) -> self:
         verifying_key = signing_key.get_verifying_key()
         signature = signing_key.sign(self.challenge)
-    
+
         return self.__class__(
             address=self.address,
             nonce=self.nonce,

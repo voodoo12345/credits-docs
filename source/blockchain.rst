@@ -56,6 +56,41 @@ can be any valid JSON value. In the example above a query on any other key
 apart from the explicitly defined ones will return the default integer 0.
 
 
+Included States
+^^^^^^^^^^^^^^^
+
+Included with every instance of the Credits Blockchain are a few States to assist the operation of the chain.
+
+works.credits.core.IntegerNonce
+-------------------------------
+
+A state that stores nonces corresponding to Addresses used in this blockchain.
+Nonces are integers starting with zero. The nonces are used to both provide
+sorting of Transactions issued by an Address, and to stop replaying of issued
+Transactions. While your application should generally cache and track it's
+SigningKey's nonces locally, you can always use this State to resync the cached
+nonce if cache goes astray. An Address' nonce increments when a Proof
+with that nonce applies to the state as a part of transaction.
+
+
+works.credits.core.VotingPower
+------------------------------
+
+A state used by the Credits DApp that tracks an Address' Voting Power. Voting
+Power (VP) is a numerical token used to grant an Address the capability to Vote
+and Commit to Blocks. Influence in the concensus is defined by VP. By default
+every node in the network is given an address and every address is given equal
+VP, so every node has equal say in the consensus voting process. There also
+may be use cases where an asymetric configuration is favourable, and some nodes
+have less VP than others, or no voting power altogether.
+
+VP can be reassigned and/or modified after network bootstrap, to do that you will
+need a dedicated :ref:`Transform <transform>` written that will allow manipulations
+on the ``works.credits.core.VotingPower`` state. Be sure to include some access
+control checks with it, as to not allow anybody with basic to manipulate VP on your
+network.
+
+
 .. _blockchain-block:
 
 Blockchain Block
@@ -69,7 +104,6 @@ A block also contains information on the state of the world that it is built on.
 referencing the state, a node can take the block, check that it is starting in the same
 place as the creator of the block and then apply the transactions.
 
-
 .. _blockchain-onboarding-transactions:
 
 Onboarding transactions
@@ -81,7 +115,6 @@ by sending the marshalled transaction to the node HTTP API. In other more comple
 deployments the HTTP API gateway can be replaced with other transport, e.g. TCP socket,
 CLI interface, RPC interface etc. Onboarding here serves as a transport agnostic term
 for the act of accepting transaction into the node.
-
 
 .. _blockchain-applying-transactions:
 
@@ -122,11 +155,13 @@ If we apply transaction that moves 50 credits from Alice to Bob. Then the next g
 
 This will reflect the fact that Alice has loaned further 50 credits to Bob.
 
-Applying a block is the process of applying each transaction in order. Each transaction
-will produce a new state once it is applied, and by applying every transaction in the block
-this will form the next state of the world after the block.
+Applying a block is the process of applying each transaction in order. Each
+transaction will produce a new state once it is applied, and by applying every
+transaction in the block this will form the next state of the world after
+the block.
 
-Any :ref:`Applicable <interfaces-applicable>` object should be able to apply itself.
+Any :ref:`Applicable <interfaces-applicable>` object should be able to
+apply itself.
 
 
 .. _blockchain-consensus:
@@ -134,50 +169,56 @@ Any :ref:`Applicable <interfaces-applicable>` object should be able to apply its
 Blockchain consensus
 ^^^^^^^^^^^^^^^^^^^^
 
-There are many different Consensus mechanisms. Two of the common mechanisms that are talked about in
-blockchain are Proof of Work and Proof of Stake.  
+There are many different Consensus mechanisms. Two of the common mechanisms
+that are talked about in blockchain are Proof of Work and Proof of Stake.
 
 
 Proof of Work
 -------------
-Proof of work is the more commonly talked about mechanism for achieving consensus. Proof of work 
-requires that a contributor do a deterministically difficult amount of work that is then easy to check. 
-Bitcoin does this by making miners hash until they get the longest string of zeroes this 
-artificially slows down block creation in the bitcoin network. 
-Anyone can mine blocks but given the current normalize difficulty it takes a long time for 
+
+Proof of work is the more commonly talked about mechanism for achieving
+consensus. Proof of work requires that a contributor do a deterministically
+difficult amount of work that is then easy to check. Bitcoin does this by
+making miners hash until they get the longest string of zeroes this
+artificially slows down block creation in the bitcoin network. Anyone can
+mine blocks but given the current normalize difficulty it takes a long time for
 non-specialized hardware to mine a valid block. Think of this as like a lottery,
 everyone is turning a crank and one person is rewarded every x minutes.
-
 
 Proof of Stake
 --------------
 
-Proof of stake is far more like a traditional election model. Everyone locks up some value as a promise of their 
-good intentions inside the system and then there are fixed voting rounds where each person votes using the weight of the value locked 
-up. In an example both Alice and Bob stake 50 value into the system, they both have equal votes but neither have
-majority. Both together can vote and provide majority for confirming a block. Anyone can propose a block but only
-those with stake can vote.
+Proof of stake is far more like a traditional election model. Everyone locks
+up some value as a promise of their good intentions inside the system and then
+there are fixed voting rounds where each person votes using the weight of the
+value locked up. In an example both Alice and Bob stake 50 value into the system,
+they both have equal votes but neither have majority. Both together can vote
+and provide majority for confirming a block. Anyone can propose a block but
+only those with stake can vote.
 
 
 Credits consensus
 -----------------
 
-Consensus in Credits is at its heart Proof of Stake. Validators bond value against as a promise of their honest intentions.
-Validators attempt to create valid blocks of unconfirmed transactions. These blocks are distributed between the validators.
-Each validator picks a block to vote on (currently this is the first valid block seen) and then tells the network of their
-intention to vote for this block. Once enough votes have been cast for that block to have a winning concensus everyone announces
-their intention to commit to that block. With enough voters committed to a block it becomes ratified history and the state of the 
-world is upgraded.
+Consensus in Credits is at its heart Proof of Stake. Validators bond value
+against as a promise of their honest intentions.  Validators attempt to create
+valid blocks of unconfirmed transactions. These blocks are distributed between
+the validators.  Each validator picks a block to vote on (currently this is
+the first valid block seen) and then tells the network of their intention to
+vote for this block. Once enough votes have been cast for that block to have
+a winning concensus everyone announces their intention to commit to that block.
+With enough voters committed to a block it becomes ratified history and the
+state of the world is upgraded.
 
 .. _blockchain-structure:
 
 Blockchain structure
 ^^^^^^^^^^^^^^^^^^^^
 
-Building from states and blocks the chain can be created. Because Credits blockchain
-has intermediate states it's not a direct link from block to block, instead, a
-block is formed from the current state, and then the application of that block to
-current state forms the next state.
+Building from states and blocks the chain can be created. Because Credits
+blockchain has intermediate states it's not a direct link from block to block,
+instead, a block is formed from the current state, and then the application of
+that block to current state forms the next state.
 
 Imagine starting at the following state 0:
 
@@ -190,8 +231,10 @@ Imagine starting at the following state 0:
         }
     }
 
-And there is a transaction that moves 50 credits from ``Alice`` to ``Bob``. This
-transaction can apply to state 0, so it is formed into a block that builds upon state 0.
+And there is a transaction that moves 50 credits from ``Alice`` to ``Bob``.
+This transaction can apply to state 0, so it is formed into a block that
+builds upon state 0.
+
 ::
 
     +-----------+
@@ -208,9 +251,9 @@ transaction can apply to state 0, so it is formed into a block that builds upon 
     +-----------+
 
 
-The block is then distributed between the nodes and references the state it is
-built on. Once the network agrees to make this block the next one in the chain
-each node applies this block to state 0 to produce the next state.
+The block is then distributed between the nodes and references the state it
+is built on. Once the network agrees to make this block the next one in the
+chain each node applies this block to state 0 to produce the next state.
 ::
 
     +-----------+      +-----------+
@@ -239,8 +282,8 @@ The new state 1 looks like the following:
     }
 
 A new transaction is formed and posted to the blockchain, this transaction
-moves the remaining 50 from ``Alice`` to ``Bob``. Another new block is
-formed looking like such:
+moves the remaining 50 from ``Alice`` to ``Bob``. Another new block is formed
+looking like such:
 ::
 
     +-----------+      +-----------+
@@ -256,7 +299,8 @@ formed looking like such:
     |           |      |           |
     +-----------+      +-----------+
 
-The process continues and block 1 will be applied to state 1, forming the next full state. 
+The process continues and block 1 will be applied to state 1, forming the
+next full state.
 ::
 
     +-----------+      +-----------+      +-----------+

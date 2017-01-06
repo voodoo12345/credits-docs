@@ -35,17 +35,17 @@ will return a list of mandatory addresses that must provide a Proof.
     from credits.key import ED25519SigningKey
     from credits.address import CreditsAddress
     from credits.hash import SHA256HashProvider
-    
+
     HASH_PROVIDER = SHA256HashProvider()
-    
+
     ALICE_SK = ED25519SigningKey.new()
     ALICE_VK = ALICE_SK.get_verifying_key()
     ALICE_ADDR = CreditsAddress(ALICE_VK.to_string()).get_address()
-    
+
     BOB_SK = ED25519SigningKey.new()
     BOB_VK = BOB_SK.get_verifying_key()
     BOB_ADDR = CreditsAddress(BOB_VK.to_string()).get_address()
-    
+
     transform = BalanceTransform(ALICE_ADDR, BOB_ADDR, 100)
     # transform.required_authorizations() ==  [ALICE_ADDR]
 
@@ -56,7 +56,7 @@ will return a list of mandatory addresses that must provide a Proof.
             SingleKeyProof(ALICE_ADDR, nonce, transform.hash(HASH_PROVIDER)).sign(ALICE),
         ]
     )
-    
+
     payload = transaction.marshall()  # This output can be jsonified and POSTed to /api/v1/transaction
 
 
@@ -105,8 +105,10 @@ In this case following transform can be used:
 
         def verify(self, state):
             if state[self.LOG_STATE][self.hash]:
-                return None, "Already have this hash logged!"
-            return None, None
+                error = "hash %s already exists." % (self.hash, )
+                return None, Exception(error)
+
+        return None, None
 
         def apply(self, state):
             state[self.LOG_STATE][self.hash] = {"logged_at": time.asctime()}
@@ -171,6 +173,7 @@ for transferring basic token balances between accounts.
             """
             balances = state["credits.test.Balances"]
 
+            # Don't rely on key access, it returns default values for missing keys. Use explicit membership checks.
             if self.addr_from not in balances:
                 return None, "%s not in credits.test.Balances."
 
@@ -221,12 +224,22 @@ complex future dependencies and delayed execution.
 Proof
 ^^^^^
 
-The Proof is an :ref:`Applicable <interfaces-applicable>` object requiring both ``verify`` and
-``apply`` methods implemented. Proofs are constructed with some sort of resolvable
-address, a nonce (which is typically an autoincrementing number), and a
-challenge to sign. This challenge will typically be the hash of a Transform.
+A Proof is an :ref:`Applicable <interfaces-applicable>`, and
+:ref:`Marshallable <interfaces-marshallable>` object. Proofs are stored within
+a Transasction and are constructed with an autoincrementing nonce, a
+resolvable address and a challenge to sign (typically the hash of a transform).
+The perpose of a Proof is to provide the cryptographic security and
+authorization that a Transform may be applied to the Blockchain.
 
-Once constructed a Proof is *unsigned* and a ``sign`` method must be called
+It is important to note that a Proof is a single-use construct: every a proof
+is constructed in releation to an address' nonce. This is easily achieved by
+tracking the nonce of every address you generate proofs for locally within
+your client application. A Proof should only be applicable when it's address'
+nonce is equal to the nonce stored in state. Once the ``apply`` has succeeded,
+the nonce is incremented and the process repeats. This both provides
+per-address ordering and one-time use.
+
+Once constructed a Proof is *unsigned* and it's ``sign`` method must be called
 with a ``signing_key`` to generate a ``verifying_key`` and ``signature``. Once
 signed a Proof is now considered valid as during it's ``verify`` call it will
 attempt to convert the ``verifying_key`` into an address. This address will be
@@ -260,6 +273,8 @@ import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
             self.address = address
             self.nonce = nonce
             self.challenge = challenge
+
+            # These are None for now, they will be filled in when you call sign()
             self.verifying_key = verifying_key
             self.signature = signature
 
@@ -272,8 +287,7 @@ import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
             """
             if (self.signature is None) or (self.verifying_key is None):
                 error = "Proof has not been signed."
-                self.logger.error(error)
-                return None, error
+                return None, Exception(error)
 
             # Generate an address for this verifying_key, we'll need to validate
             # the key used to sign this proof resolves to a predetermined address.
@@ -282,13 +296,11 @@ import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
 
             if address != self.address:
                 error = "Proof for address {} was signed with {}".format(self.address, address)
-                self.logger.error(error)
-                return None, error
+                return None, Exception(error)
 
             if not self.verifying_key.verify(self.challenge, self.signature):
                 error = "SingleKeyProof failed a signature check against {}".format(address)
-                self.logger.error(error)
-                return None, error
+                return None, Exception(error)
 
             known_nonce = nonces[address]
             if self.nonce < known_nonce:
@@ -297,8 +309,7 @@ import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
                     known_nonce,
                     address
                 )
-                self.logger.error(error)
-                return None, error
+                return None, Exception(error)
 
             return state, None
 
@@ -316,8 +327,7 @@ import ``credits.proof.SingleKeyProof`` from the Common Library and use that.
                     nonces[address],
                     address
                 )
-                self.logger.error(error)
-                return None, error
+                return None, Exception(error)
 
             nonces[address] += 1
 
