@@ -183,7 +183,7 @@ included as part of the multipart POST request.
 
 .. code-block:: bash
 
-    curl -X POST --header "Authorization: <your_token>" -F "organization_id=<org_id>" -F "name=example-network" -F "state=@/path/to/your/starting/state.json" -F module=@/path/to/your/module/file.py -F size=<network_size> https://public.credits.works/api/v1/network
+    curl -X POST --header "Authorization: <your_token>" -F "organization_id=<org_id>" -F "name=example-network" -F state=@/path/to/your/starting/state.json -F module=@/path/to/your/module/file.py -F size=<network_size> https://public.credits.works/api/v1/network
 
 .. _balance_transform.py: https://github.com/CryptoCredits/credits-common/blob/develop/examples/balance_transform.py
 
