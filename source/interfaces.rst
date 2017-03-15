@@ -15,11 +15,12 @@ converting these maps back into instances.
 FQDN
 ----
 
-Marshallable objects must contain a fully qualified domain name, this is used by
-the framework to resolve objects from serialised representations. The fqdn
-should be made as an attribute of the implementor as either a class level
-variable or a property, either are acceptable. This fqdn will be used during the
-unmarshalling process to locate an associated Class to instanciate.
+Marshallable objects must contain a Fully Qualified Domain Name (FQDN), this
+is used by the framework to resolve objects from serialised representations.
+The FQDN should be made as an attribute of the implementor as either a
+class level variable or a property, either are acceptable. This fqdn will be
+used during the unmarshalling process to locate an associated Class to
+instanciate.
 
 .. code-block:: python
    :linenos:
@@ -107,7 +108,7 @@ considered unsafe.
             # consider this a failure to verify and return a suitable message.
             return None, "from_addresss %s does not exist in 'foo.bar'" % self.from_address
 
-        return None, None  # Nothing to return, but no error.
+        return state
 
 apply
 -----
@@ -122,10 +123,10 @@ error, return an erroneous Result.
         try:
             state["foo.bar"][self.from_address] -= self.amount
             state["foo.bar"][self.to_address] += self.amount
-            return state, None
+            return state
 
         except Exception as e:
-            return None, e.message
+            raise e
 
 
 .. _interfaces-signable:
