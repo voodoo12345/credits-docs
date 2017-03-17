@@ -6,20 +6,17 @@
 Welcome to Credits' blockchain docs
 ===================================
 
-Here you will find all the information necessary to begin building and deploying your own blockchain networks.
-Start with :ref:`Getting started <getting-started>` manual.
+Here you will find all the information necessary to begin building and
+deploying your own blockchain networks with Credits. Start with
+:ref:`Getting started <getting-started>` manual.
 
 Contents
 ^^^^^^^^
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   getting_started
-   system_architecture
-   step_by_step
-   common_library
-   api_paas
-   api_node
-   blockchain
-   transactions
-   interfaces
+    getting_started
+    blockchain
+    dapp
+    network
+    interfaces

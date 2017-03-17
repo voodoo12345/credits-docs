@@ -3,46 +3,104 @@
 Getting started
 ===============
 
-To start building a blockchain, sign up with one of our cloud platforms. The
-public PaaS is designed for the general public, while G-Cloud infrastructure is
-designed for government agencies. This documentation transparently applies to
-both platforms, the only difference being the onboarding processes and base API
-domains.
+To start building a blockchain, you will need to install Credits Core blockchain
+framework, lay out your dapp scaffold and bootstrap your development network.
+
+The Credits Core framework is written in Python and going forwards we will be
+using standard Python tools to work with it.
 
 
-Public platform onboarding
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Installation
+^^^^^^^^^^^^
 
-You can access Credits public cloud blockchain beta platform at
-`public.credits.works <https://public.credits.works/api/v1/status>`_.
-You can signup directly via the platform API itself following
-:ref:`PaaS API documentation <paas-api>`.
+Before installing the framework please make sure these external system
+dependencies are met:
+ - Python3.5+
+ - python pip
+ - libffi
+ - libzmq
 
-G-Cloud platform onboarding
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To install the framework run:
 
-In order to sign-up for our G-Cloud offering, you will need to go through our
-:ref:`onboarding process <gcloud-onboarding-process>`, including verifying your
-organisation as a qualified UK government agency.
+.. code-block:: bash
+
+    pip install git+ssh://git@github.com/CryptoCredits/credits-core.git
+
+You may want to use `virtualenv <https://docs.python.org/3/library/venv.html>`_
+to contain all installed python packages instead of putting it into your
+global system space.
+
+The framework contains ``credits`` CLI tool that you will use to template
+your dapps and bootstrap your local dev network.
 
 
-How to interact with the system
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Dapp scaffold
+^^^^^^^^^^^^^
+Once Credits Core is installed you can run:
 
-Once you have registered with public API (or received API keys from us for GCloud)
-you will need to create your first blockchain network and start developing with it.
-You will be developing in Python using publicly accessible ``credits.common`` library.
+.. code-block:: bash
 
-The public PaaS API is available at `public.credits.works <https://public.credits.works/api/v1/status>`_.
+    credits dapp create --name <dapp_name>
 
-The G-Cloud PaaS API is available at `gcloud.credits.works <https://gcloud.credits.works/api/v1/status>`_.
+This will create a ``./<dapp_name>`` folder and a scaffold of the Credits
+dapp inside it. You will use it to develop your blockchain.
+
+Your dapp is effectively a python package, and it needs to be made
+discoverable for Credits Core framework to allow it to be later included
+into the blockchain. To achieve this run:
+
+.. code-block:: bash
+
+    pip install -e ./<dapp_name>
+
+The ``network.yaml`` file is created as part of the dapp scaffold. It is
+used in both the dapp configuration, and as a base for the next step --
+network bootstrap.
+
+
+Network bootstrap
+^^^^^^^^^^^^^^^^^
+You need a blockchain network to both run your dapp and integrate your
+client applications. To bootstrap a blockchain network run:
+
+.. code-block:: bash
+
+    credits local create ./<dapp_name>/network.yaml
+
+This will roll out configuration for a single node network in the
+``./node00`` folder. It contains all you will need to run
+the Credits blockchain network.
+
+You can also create multinode network if needed by adding param
+``--count <number_of_nodes>``.
+
+
+Network run
+^^^^^^^^^^^
+To run the blockchain network you will need to start the nodes you
+have just created. You do this with:
+
+.. code-block:: bash
+
+    credits local run ./node00/*.yaml
+
+To start the node you need to provide it with both the network config,
+which is copied to the node folder and the node config itself. Both
+are located in the node folder as ``network.yaml`` and ``node.yaml``.
+
+This starts node process in the foreground and outputs the node logs
+into stdout.
+
+By default ``loglevel`` in node config is set to ``WARNING``, you may want
+to make it more verbose with ``--log-level <LOG_LEVEL>`` option.
+
+If you need to run network of several nodes - you will need to run each node
+separately.
 
 
 Further reading
 ^^^^^^^^^^^^^^^
 
- - :ref:`system architecture <system-architecture>` overview
- - :ref:`step by step <step-by-step>` custom blockchain creation guide
  - very basics of :ref:`Credits blockchain <blockchain>` mechanics
  - :ref:`Transactions <transactions-transforms-proofs>`
  - :ref:`Interfaces <interfaces>`
