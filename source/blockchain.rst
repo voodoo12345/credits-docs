@@ -314,27 +314,112 @@ permission granting process.
 Credits consensus
 -----------------
 
-Consensus in Credits is at its heart Proof of Stake. Validators bond value
-against as a promise of their honest intentions. Validators attempt to create
-valid blocks of unconfirmed transactions. These blocks are distributed between
-the validators. Each validator picks a block to vote on (currently this is
-the first valid block seen) and then tells the network of their intention to
-vote for this block. Once enough votes have been cast for that block to have
-a winning concensus everyone announces their intention to commit to that block.
-With enough voters committed to a block it becomes ratified history and the
-state of the world is upgraded.
+Credits consensus is a leaderless two phase commit algorithm with variable
+:ref:`voting power <dlt-consensus-voting-power>`.
+
+This means that each and every DLT network participant is equal in it's
+rights to gather transactions from the unconfirmed transactions pool and
+form a block, and they are free to vote on the blocks that make the most
+sense according to current block validation rules. Also votes may have
+different weights though according to voting power distribution for a given
+network.
+
+Essentially Credits consensus is a variant of Proof of Stake algorithm.
+
+.. _dlt-consensus-example:
+
+Consensus example sequence
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Assume a network of three nodes, A B and C. Network starts at height 0, no
+blocks exist yet and the current state of the network is state 0.
+
+#. Node A receives a valid transaction from a client through HTTP gateway.
+#. Node A verifies the transaction and onboards it, adding it to the
+   unconfirmed transactions pool.
+#. Node A recognises new transaction in the pool and tries to form a block
+#. Node A forms a block proposal and sends it out to other nodes in the
+   network.
+#. Nodes B and C receive the block proposal and verify the proposed block
+   for validity.
+#. Nodes B and C confirm block validity and start voting on the block.
+   This is Phase One voting. At this point only one block proposal exists,
+   so all votes are given to this block.
+#. Votes are exchanged and if one block reaches quorum of
+   :ref:`Voting Power <dlt-consensus-voting-power>` backing -- it is now a
+   `voted block`. The Phase One voting done.
+#. Voted block is repropagated across the P2P network to every node together
+   with votes casted for it.
+#. Nodes receive the voted block and go into Phase Two voting on
+   committing to this block.
+#. Once the selected block has received quorum Voting Power backing - it is
+   considered `committed` to be the next block in the chain. The Phase
+   Two voting done.
+#. Once the block is committed it is added to the chain and persisted on
+   every node.
+#. The process can start over from scratch if there are new transactions
+   in the pool.
+
+In a more complex real life situations there will be multiple transactions
+forming block proposals on different nodes and nodes will exchange and
+vote on proposals until one of the proposals reaches quorum.
+
+The consensus algorithm depends on several things:
+
+a. There has to be a required quorum defined. Current default is at least 51% of
+   all Voting Power present in the system.
+b. There has to be voting power available in the system, and whoever is
+   executing the votes using it -- has to have access to the corresponding
+   private keys. This is discussed in more details in
+   :ref:`Voting <dlt-consensus-voting-power>` section.
+c. There has to be a connection between nodes that will allow to propagate
+   the blocks and votes.
+
+Given these conditions are met - the consensus algorithm will function
+correctly.
 
 
 .. _dlt-consensus-voting-power:
 
-Voting power
-~~~~~~~~~~~~
-Voting Power (VP) is fundamental to Credits Core consensus algorithm.
-VP is one or more arbitrary numerical values assigned addresses on the
-blockchain. These values represent the weight of voting allocated
-to each of these addresses. In the simplest case voting power is
-distributed equally between addresses attached to each node of the DLT
-network.
+Voting and Voting Power
+~~~~~~~~~~~~~~~~~~~~~~~
+Voting in Credits Consensus is strongly tied to Voting Power (VP). VP is one
+or more arbitrary integer values assigned addresses on the blockchain.
+These values are stored in the blockchain :ref:`State <blockchain-state>`
+and represent the weight of votes allocated to each of these addresses.
+
+.. code-block:: json
+
+    {
+        "credits.voting.model.voting": {
+            "19joM8wBG7bAmBypMj23DBmmjGmqfxL4Bj": 100,
+            "14RixTSeLtit5GJoDKdEJ23ob74vcvcFvv": 100
+        }
+    }
+
+Example above is a subset of the blockchain state showing two addresses with
+``100`` of voting power assigned to each. The VP figure itself assigned to
+each address is of little importance, what matters is the relative weight
+of VP of each address to the total VP declared.
+
+To use this voting power, i.e. cast a vote one must have in possession the
+private key corresponding to the address VP is assigned to to be able
+to prove the ownership. By default every node of the Credits DLT network holds
+a private key to one of the VP addresses and casts votes with it, and VP
+itself is split equally between all parties.
+
+However it is totally possible practically to create new addresses and
+assign VP to them, imbalance the system by giving some addresses more VP
+than others or strip out VP completely from some addresses
+(set to ``0`` or delete address).
+
+If VP would be completely absent, so no addresses will hold any -- then the
+DLT will stall and won't be able to progress, i.e. confirm new blocks.
+
+
+
+So in the simplest default case VP is distributed equally between addresses
+attached to each node of the DLT network.
 
 ::
 
@@ -352,7 +437,7 @@ network.
             |  VP 100   |
             +-----------+
 
-In this example each node has VP value of 100 and votes for blocks using
+In this example each node has VP value of ``100`` and votes for blocks using
 this VP.
 
 A more advanced case:
@@ -373,7 +458,7 @@ A more advanced case:
             |  VP 100   |      |  VP   0   |
             +-----------+      +-----------+
 
-In here three nodes still have same 100 VP, while one other node has
+In here three nodes still have same ``100`` VP, while one other node has
 no VP at all. This node cannot vote on the blocks going into the blockchain
 but has full visibility of the blockchain contents and can confirm it's
 validity.
@@ -387,12 +472,24 @@ Partitioning
 Forking is not possible in Credits Core, but the Credits network can go into
 partitioned state.
 
-Partitioning is a situation where several some nodes disagree with the rest
-of the network on the contents of the blockchain or loose connection to the
-rest of the network. Forking does not happen in this case because the
-minority of the network will never be able to form quorum and progress their
-own version of the chain. However those nodes will not progress with the
-rest of the network and will effectively stall.
+Partitioning is a situation where the quorum cannot be reached in a part of
+the network because either the network connectivity is impaired and nodes
+cannot propagate the votes on new blocks or the nodes cannot agree on the
+rules of the network and do not cast votes on blocks that they assume invalid.
 
-This situation will likely to require manual intervention to identify root
-of the problem.
+In both of these scenarios the Voting Power required to choose and commit to
+new block becomes unavalable to part or whole network, and the affected part
+of the network stalls, i.e. cannot continue to grow the chain.
+
+Since not enough VP is available to progress the chain and vote on blocks
+-- no minority chain will form, the forking or chain reorganisation will
+not happen at any circumstance and any data that was voted and committed
+to the chain before the partitioning will be not affected.
+
+In this case if only a minority of the network's VP is affected and the
+majority is still both in agreement and has enough VP available to
+form a quorum -- the majority of the network will continue to operate normally.
+
+The partitioning situation will likely to require manual intervention to
+identify and address the root of the problem, whether it is a connectivity
+issue, consensus disagreement or anything else.
