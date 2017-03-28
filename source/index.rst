@@ -3,20 +3,23 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Credits' blockchain docs
-===================================
+.. _index-welcome:
+
+Welcome to Credits Core docs
+============================
 
 Here you will find all the information necessary to begin building and
-deploying your own blockchain networks with Credits. Start with
+deploying your own distributed ledger network with Credits. Start with
 :ref:`Getting started <getting-started>` manual.
 
-Contents
-^^^^^^^^
+
 .. toctree::
     :maxdepth: 2
+    :caption: Contents
+    :name: index-welcome
 
     getting_started
     blockchain
     dapp
-    network
     interfaces
+    faq
