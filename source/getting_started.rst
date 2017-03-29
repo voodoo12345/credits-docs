@@ -3,7 +3,7 @@
 Getting started
 ===============
 
-To start building a blockchain, you will need to install Credits Core blockchain
+To start building a distributed ledger, you will need to install Credits Core
 framework, lay out your dapp scaffold and bootstrap your development network.
 
 The Credits Core framework is written in Python and going forwards we will be
@@ -43,11 +43,11 @@ Once Credits Core is installed you can run:
     credits dapp create --name <dapp_name>
 
 This will create a ``./<dapp_name>`` folder and a scaffold of the Credits
-dapp inside it. You will use it to develop your blockchain.
+dapp inside it. You will use it to develop your distributed ledger.
 
 Your dapp is effectively a python package, and it needs to be made
 discoverable for Credits Core framework to allow it to be later included
-into the blockchain. To achieve this run:
+into the ledger. To achieve this run:
 
 .. code-block:: bash
 
@@ -60,8 +60,8 @@ network bootstrap.
 
 Network bootstrap
 ^^^^^^^^^^^^^^^^^
-You need a blockchain network to both run your dapp and integrate your
-client applications. To bootstrap a blockchain network run:
+You need a distributed ledger network to both run your dapp and integrate
+your client applications. To bootstrap a distributed ledger network run:
 
 .. code-block:: bash
 
@@ -69,16 +69,16 @@ client applications. To bootstrap a blockchain network run:
 
 This will roll out configuration for a single node network in the
 ``./node00`` folder. It contains all you will need to run
-the Credits blockchain network.
+the Credits Core network node.
 
-You can also create multinode network if needed by adding param
+You can also create multi-node network if needed by adding param
 ``--count <number_of_nodes>``.
 
 
 Network run
 ^^^^^^^^^^^
-To run the blockchain network you will need to start the nodes you
-have just created. You do this with:
+To run the network node you will need to start the nodes you have just
+created. You do this with:
 
 .. code-block:: bash
 
@@ -94,16 +94,7 @@ into stdout.
 By default ``loglevel`` in node config is set to ``WARNING``, you may want
 to make it more verbose with ``--log-level <LOG_LEVEL>`` option.
 
-If you need to run network of several nodes - you will need to run each node
+If you need to run a network of several nodes - you will need to run each node
 separately.
 
-
-Further reading
-^^^^^^^^^^^^^^^
-
- - very basics of :ref:`Credits blockchain <blockchain>` mechanics
- - :ref:`Transactions <transactions-transforms-proofs>`
- - :ref:`Interfaces <interfaces>`
- - :ref:`PaaS API <paas-api>`
- - :ref:`Node API <node-api>`
 
