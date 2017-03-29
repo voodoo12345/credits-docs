@@ -20,7 +20,7 @@ is used by the framework to resolve objects from serialised representations.
 The FQDN should be made as an attribute of the implementor as either a
 class level variable or a property, either are acceptable. This fqdn will be
 used during the unmarshalling process to locate an associated Class to
-instanciate.
+instantiate.
 
 .. code-block:: python
    :linenos:
@@ -180,7 +180,7 @@ Given a ``credits.hash.HashProvider``, construct some sort of string hash it.
    :linenos:
 
     def hash(self, hash_provider: credits.hash.HashProvider) -> str:
-        # A primative example where we use variables from this class to construct a
+        # A primitive example where we use variables from this class to construct a
         # challenge. Then hash and return the output.
     
         challenge = self.name + str(self.age) + str(self.value)

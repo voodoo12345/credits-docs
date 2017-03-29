@@ -71,7 +71,7 @@ This will roll out configuration for a single node network in the
 ``./node00`` folder. It contains all you will need to run
 the Credits Core network node.
 
-You can also create multinode network if needed by adding param
+You can also create multi-node network if needed by adding param
 ``--count <number_of_nodes>``.
 
 
@@ -94,7 +94,7 @@ into stdout.
 By default ``loglevel`` in node config is set to ``WARNING``, you may want
 to make it more verbose with ``--log-level <LOG_LEVEL>`` option.
 
-If you need to run network of several nodes - you will need to run each node
+If you need to run a network of several nodes - you will need to run each node
 separately.
 
 

@@ -5,9 +5,9 @@ Credits Core
 ^^^^^^^^^^^^
 
 As any blockchain - the Credits blockchain consists of Blocks. And every
-block contains transactions that happened since previous block created.
+block contains transactions that happened since the previous block created.
 
-Unlike other blockchains the Credits blockchain also contains States,
+Unlike other blockchains, the Credits blockchain also contains States,
 which are snapshots of the contents of the blockchain created after each
 block is appended to the blockchain.
 
@@ -45,12 +45,12 @@ string. An example of a traditional state as shown:
     }
 
 In the example above there is a ``works.credits.balances`` model and a
-``works.credits.loans`` model. Each model has to have an FQDN key, and
+``works.credits.loans`` model. Each model has to have an FQDN key and
 may have entries inside it. You can define as many models as you need
 inside the global state.
 
-Inside the model you can have an arbitrary number of key value pairs.
-Usually Core addresses are used as the keys in a model but this
+Inside the model you can have an arbitrary number of key-value pairs.
+Usually, Core addresses are used as the keys in a model but this
 doesn't always need to be the case, as the keys nature depends on
 application's business logic. The model is ordered by insertion order
 and the whole global state is hashed to provide a state hash.
@@ -209,13 +209,13 @@ new valid transactions are coming in.
 Credits Core consensus
 ----------------------
 
-Credits Core consensus is a leaderless two phase commit algorithm with
+Credits Core consensus is a leaderless two-phase commit algorithm with
 variable :ref:`voting power <dlt-consensus-voting-power>`.
 
-This means that each and every DLT network participant is equal in it's
+This means that each and every DLT network participant is equal in its
 rights to gather transactions from the unconfirmed transactions pool and
 form a block, and they are free to vote on the blocks that make the most
-sense according to current block validation rules. Also votes may have
+sense according to current block validation rules. Also, votes may have
 different weights though according to voting power distribution for a given
 network.
 
@@ -241,29 +241,28 @@ blocks exist yet and the current state of the network is state 0.
    This is the process of `voting`, phase one of the consensus algorithm.
    At this point only one block proposal exists, so all votes are given to
    this block.
-#. Votes are exchanged and if one block reaches quorum of
+#. Votes are exchanged and if one block reaches the quorum of
    :ref:`Voting Power <dlt-consensus-voting-power>` backing -- it is now a
    `voted block`. The phase one is done.
 #. When the node receives enough votes on a block and thus finds out that the
-   block was `voted`, node goes into phase two of the consensus algorithm --
-   `committing` to the block.
+   block was `voted`, the node goes into phase two of the consensus algorithm
+   -- `committing` to the block.
 #. Once the selected block has received quorum Voting Power backing - it is
-   considered committed to be the next block in the chain. The phase
-   two is done.
+   considered committed to be the next block in the chain. Phase two is done.
 #. Every node receiving the block with enough committing VP attached to it
    adds this block to the chain and persists it on whatever storage is used
    with that particular node.
 #. The process can start over from scratch if there are new transactions
    in the pool.
 
-In a more complex real life situations there will be multiple transactions
+In a more complex real life situations, there will be multiple transactions
 forming block proposals on different nodes and nodes will exchange and
-vote on proposals until one of the proposals reaches quorum.
+vote on proposals until one of the proposals reaches the quorum.
 
 The consensus algorithm depends on several things:
 
-a. There has to be a required quorum defined. Current default is at least 51% of
-   all Voting Power present in the system.
+a. There has to be a required quorum defined. The current default is at
+   least 51% of all Voting Power present in the system.
 b. There has to be voting power available in the system, and whoever is
    executing the votes using it -- has to have access to the corresponding
    private keys. This is discussed in more details in
@@ -301,9 +300,9 @@ of VP of each address to the total VP declared.
 
 To use this voting power, i.e. cast a vote one must have in possession the
 private key corresponding to the address VP is assigned to to be able
-to prove the ownership. By default every node of the Credits DLT network holds
-a private key to one of the VP addresses and casts votes with it, and VP
-itself is split equally between all parties.
+to prove the ownership. By default, every node of the Credits DLT network
+holds a private key to one of the VP addresses and casts votes with it,
+and VP itself is split equally between all parties.
 
 However it is totally possible practically to create new addresses and
 assign VP to them, imbalance the system by giving some addresses more VP
@@ -367,7 +366,7 @@ Partitioning
 ~~~~~~~~~~~~
 
 Forking is not possible in Credits Core, but the Credits network can go into
-partitioned state.
+the partitioned state.
 
 Partitioning is a situation where the quorum cannot be reached in a part of
 the network because either the network connectivity is impaired and nodes
@@ -375,15 +374,15 @@ cannot propagate the votes on new blocks or the nodes cannot agree on the
 rules of the network and do not cast votes on blocks that they assume invalid.
 
 In both of these scenarios the Voting Power required to choose and commit to
-new block becomes unavalable to part or whole network, and the affected part
-of the network stalls, i.e. cannot continue to grow the chain.
+new block becomes unavailable to part or the whole network, and the affected
+part of the network stalls, i.e. cannot continue to grow the chain.
 
 Since not enough VP is available to progress the chain and vote on blocks
 -- no minority chain will form, the forking or chain reorganisation will
 not happen at any circumstance and any data that was voted and committed
 to the chain before the partitioning will be not affected.
 
-In this case if only a minority of the network's VP is affected and the
+In this case, if only a minority of the network's VP is affected and the
 majority is still both in agreement and has enough VP available to
 form a quorum -- the majority of the network will continue to operate normally.
 

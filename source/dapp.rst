@@ -5,20 +5,21 @@ Credits Core Dapp
 
 The Credits Dapp is a distributed ledger-based application developed using
 the Credits Core framework. Dapp is a unit of business logic, and it's
-supposed to be designed with specific real life use case in mind.
+supposed to be designed with specific real-life use case in mind.
 
 Credits Dapp is a software module designed to run as part of the Credits
-Core node, it's not a standalone application in itself. However it's not
-meant to be uploaded into the blockchain as a smart contract code. Instead it
+Core node, it's not a standalone application in itself. However, it's not
+meant to be uploaded into the blockchain as a smart contract code. Instead, it
 is provided as a part of network setup and configuration before Core node is
 started. Once the node is started the Dapp runs as integral part of the
 Core, inside Core's runtime.
 
-Credits Dapp is a Python module, and has to be discoverable to the Core
+Credits Dapp is a Python module and has to be discoverable to the Core
 using standard Python importing tools. Credits Dapp is must provide
 :ref:`state <blockchain-state>` definition,
 :ref:`transforms <transactions-transform>` that describe how that state
-is to be mutated and optionally unit tests that ensure validity of the above.
+is to be mutated and optionally unit tests that ensure the validity of the
+above.
 
 Credits Dapps can be mixed together, inherited, extended and reused just as
 any other software libraries. Several basic dapps are readily available
@@ -31,10 +32,10 @@ Models
 ------
 
 Credits Dapp Model is a data model used to populate the relevant state.
-Model carries an FQDN that defines name for relevant state and defines
-defaults that will be used for new keys added to this state.
+A model carries an FQDN that defines the name for relevant state. Also
+model defines defaults that will be used for new keys added to this state.
 
-Model should extended from the base class ``credits.core.model`` and
+Model should be extended from the base class ``credits.core.model`` and
 produce a :ref:`Marshallable <interfaces-marshallable>` object. Here
 is an example of a fully valid model:
 
@@ -45,7 +46,7 @@ is an example of a fully valid model:
         fqdn = 'works.credits.balance'
         default_factory = int
 
-This model is describing balances and enforces it's values to be integer.
+This model is describing balances and enforces its values to be an integer.
 
 
 .. _dapp-transforms:
@@ -54,8 +55,8 @@ Tranforms
 ---------
 
 Transform is a standard unit of work in Credits Core. It's used to modify,
-transform the state and produce new state. Each transform has to have
-``verify()`` and ``apply()`` methods that verify validity of the
+transform the state and produce the new state. Each transform has to have
+``verify()`` and ``apply()`` methods that verify the validity of the
 transform, it's data and the state it's applied against and apply actual
 changes to the state.
 
@@ -89,7 +90,7 @@ Example transform
 ~~~~~~~~~~~~~~~~~
 
 Key-Value storage use case is probably the simplest one possible on
-the distributed ledger. In this case following transform can be used:
+the distributed ledger. In this case, following transform can be used:
 
 .. code-block:: python
    :linenos:
@@ -148,11 +149,11 @@ the distributed ledger. In this case following transform can be used:
             state[MODEL_KV][self.key] = self.value # This function mutates state so there is not need to return it
 
 
-This is an example of fully functional Key-Value transform. It can store
+This is an example of a fully functional Key-Value transform. It can store
 arbitrary values in the blockchain against arbitrary keys. The only
 verification done is to make sure the value is JSONifiable.
 
-This and few other trasforms are readily available in
+This and few other transforms are readily available in
 ``credits/core/builtin.py`` as built-in transforms.
 
 
@@ -162,7 +163,7 @@ Reusable dapps
 A Credits Dapp is essentially a Python package, and thus it can be simply
 imported and reused as any other regular code library. Several simplest
 transforms are available within the Core itself as built-ins, while
-several more advances libraries are accessible as additional modules.
+several more advanced libraries are accessible as additional modules.
 
 Built-ins and third party
 ~~~~~~~~~~~~~~~~~~~~~~~~~
